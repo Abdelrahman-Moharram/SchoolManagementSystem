@@ -1,0 +1,49 @@
+﻿<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5 py-lg-0">
+    <a href="index.html" class="navbar-brand">
+        <h1 class="m-0 text-primary"><i class="fa fa-book-reader me-3"></i>Kider</h1>
+    </a>
+    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mx-auto">
+            <a href="index.html" class="nav-item nav-link active">Home</a>
+            <a href="about.html" class="nav-item nav-link">About Us</a>
+            <a href="classes.html" class="nav-item nav-link">Classes</a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                <div class="dropdown-menu rounded-0 rounded-bottom border-0 shadow-sm m-0">
+                    <a href="facility.html" class="dropdown-item">School Facilities</a>
+                    <a href="team.html" class="dropdown-item">Popular Teachers</a>
+                    <a href="call-to-action.html" class="dropdown-item">Become A Teachers</a>
+                    <a href="appointment.html" class="dropdown-item">Make Appointment</a>
+                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                    <a href="404.html" class="dropdown-item">404 Error</a>
+                </div>
+            </div>
+            <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="nav-item dropdown">
+
+                <a  class="btn btn-primary rounded-pill px-1  d-flex justify-content-center align-items-center d-lg-block dropdown-toggle" style="width:150px" data-bs-toggle="dropdown"> 
+                    
+                        <img src="/@User.Claims.FirstOrDefault(i => i.Type == "Image")?.Value" class="avatar" />
+                        <span>@User.Identity.Name</span>
+                    </a>
+                <div class="dropdown-menu rounded-0 rounded-bottom border-0 shadow-sm m-0">
+                    <a  asp-controller="Account" asp-action="@User.Identity.Name" class="dropdown-item">Profile</a>
+                    <a asp-controller="Account"  asp-action="Logout" class="dropdown-item">Logout</a>
+                    
+                </div>
+            </div>
+        }
+        else
+        {
+            <a asp-action="Register" asp-controller="Account" class="btn btn-primary rounded-pill px-3 d-none d-lg-block">Join Us<i class="fa fa-arrow-right ms-3"></i></a>
+            <span class="mx-2">or</span>
+            <a asp-action="Login" asp-controller="Account" class="btn btn-primary rounded-pill px-3 d-none d-lg-block">Login<i class="fa fa-user ms-3"></i></a>
+        }
+    </div>
+</nav>

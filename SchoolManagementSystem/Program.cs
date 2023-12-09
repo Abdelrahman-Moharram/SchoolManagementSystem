@@ -15,7 +15,7 @@ namespace SchoolManagementSystem
             builder.Services.AddControllersWithViews();
 
             //-- Add Identity 
-            builder.Services.AddIdentity<AplicationUser, IdentityRole>(
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
                 ).AddEntityFrameworkStores<ApplicationDbContext>();
 
             //-- DbContext and Connection String
