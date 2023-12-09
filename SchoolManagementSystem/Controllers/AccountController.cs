@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.DependencyResolver;
+using NuGet.Packaging;
 using SchoolManagementSystem.Configurations;
 using SchoolManagementSystem.Models;
+using SchoolManagementSystem.Repository;
 using SchoolManagementSystem.ViewModels;
 using System.Drawing;
+using System.Linq;
 using System.Security.Claims;
 
 namespace SchoolManagementSystem.Controllers
@@ -11,18 +16,29 @@ namespace SchoolManagementSystem.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        /*private readonly RoleManager<IdentityRole> roleManager;*/
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        public AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager)
+        private readonly IBaseRepository<Teacher> teacherRepo;
+        private readonly IBaseRepository<Student> studentRepo;
+        public AccountController(
+            UserManager<ApplicationUser> _userManager, 
+            RoleManager<IdentityRole> _roleManager, 
+            SignInManager<ApplicationUser> _signInManager,
+            IBaseRepository<Teacher> _teacherRepo,
+            IBaseRepository<Student> _studentRepo
+            )
         {
             userManager = _userManager;
-            /*roleManager = _roleManager;*/
+            roleManager = _roleManager;
             signInManager = _signInManager;
+            teacherRepo = _teacherRepo;
+            studentRepo = _studentRepo;
         }
 
 
         public IActionResult Register()
         {
+            ViewBag.Roles = roleManager.Roles.Where(i=>!i.Name.Contains("Admin")).ToList();
             return View();
         }
         public IActionResult Login()
@@ -30,7 +46,7 @@ namespace SchoolManagementSystem.Controllers
             return View();
         }
 
-        [Route("/Account/{username}")]
+        [Route("/user/{username}")]
         public async Task<IActionResult> Profile(string username){
             var user = await userManager.FindByNameAsync(username);
             return View(user);
@@ -58,8 +74,27 @@ namespace SchoolManagementSystem.Controllers
                 if (result.Succeeded) 
                 {
                     var Claims = new[] { new Claim("Image", user.Image) };
-                    await signInManager.SignInWithClaimsAsync(user, isPersistent:false, Claims);
+                    if (registerViewModel.Type.ToLower() == "teacher")
+                    {
+                        Teacher teacher = new Teacher{UserId = user.Id};
+                        teacherRepo.Add(teacher);
+                        teacherRepo.Save();
+                        Claims.AddRange(new List<Claim> { new Claim("Role", "Teacher"), new Claim("typeId", teacher.Id)});
+                        await signInManager.SignInWithClaimsAsync(user, isPersistent:false, Claims);
+                        await userManager.AddToRoleAsync(user, "Teacher");
+
+                    }
+                    else 
+                    {
+                        Student student = new Student { Id = user.Id };
+                        studentRepo.Add(student);
+                        studentRepo.Save();
+                        Claims.AddRange(new List<Claim> { new Claim("Role", "Student"), new Claim("typeId", student.Id) });
+                        await signInManager.SignInWithClaimsAsync(user, isPersistent: false, Claims);
+                        await userManager.AddToRoleAsync(user, "Student");
+                    }
                     return RedirectToAction("Index", "Home");
+                    
                 }
                 else
                 {
@@ -86,12 +121,24 @@ namespace SchoolManagementSystem.Controllers
                 }else{
                     user = await userManager.FindByNameAsync(loginViewModel.UserName);
                 }
-                if(user != null){
-                    List<Claim> claims = new List<Claim>{
-                        new Claim("Image", user.Image)
-                    };
-                    await signInManager.SignInWithClaimsAsync(user, loginViewModel.RemeberMe, claims);
-                    return RedirectToAction("Index", "Home");
+                if(user != null)
+                {
+                    var signresult = await signInManager.CheckPasswordSignInAsync(user, loginViewModel.Password, false);
+                    if (signresult.Succeeded)
+                    {
+                        List<Claim> claims = new List<Claim>{
+                            new Claim("Image",  user.Image != null ? user.Image:""),
+                            new Claim("Id",  user.Id != null ? user.Id:"")
+                        };
+                    
+                        await signInManager.SignInWithClaimsAsync(user, loginViewModel.RemeberMe, claims);
+                        var result = await userManager.GetRolesAsync(user);
+                        if (result.Count == 0)
+                        {
+                            return RedirectToAction("AddToRole", "Account");
+                        }
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
             return View(loginViewModel);
@@ -109,6 +156,58 @@ namespace SchoolManagementSystem.Controllers
         public async Task<IActionResult> IsUniqueEmail(string Email)
         {
             return await userManager.FindByEmailAsync(Email) == null ? Json(true) : Json(false);
+        }
+
+        public IActionResult AddToRole()
+        {
+            ViewBag.Roles = roleManager.Roles.Where(i => !i.Name.Contains("Admin")).ToList();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> AddToRoleAsync(string roleType)
+        {
+
+            if (roleManager.Roles.FirstOrDefault(i => i.Name == roleType ) != null)
+            {
+                var userId = User.Claims.FirstOrDefault(i => i.Type == "Id");
+                var Claims = new List<Claim>();
+
+                if (userId == null)
+                {
+                    return RedirectToAction("Logout", "Account");
+                }
+                var user = await userManager.FindByIdAsync(userId.Value);
+                if (roleType.ToLower() == "teacher")
+                {
+                    Teacher teacher = new Teacher { UserId = userId.Value };
+                    teacherRepo.Add(teacher);
+                    teacherRepo.Save();
+                    await userManager.AddToRoleAsync(user, "Teacher");
+                    Claims.AddRange(new List<Claim> { new Claim("Role", "Teacher"), new Claim("typeId", teacher.Id) });
+                    await userManager.AddClaimsAsync(user, Claims);
+
+                }
+                else
+                {
+                    Student student = new Student { Id = user.Id };
+                    studentRepo.Add(student);
+                    studentRepo.Save();
+                    await userManager.AddToRoleAsync(user, "Student");
+                    Claims.AddRange(new List<Claim> { new Claim("Role", "Student"), new Claim("typeId", student.Id) });
+                    await userManager.AddClaimsAsync(user, Claims);
+                    return RedirectToAction("Index", "Home");
+                }
+                return RedirectToAction("Index", "Home");   
+            }
+            else
+            {
+                ViewBag.Error = roleType+" Not Found, Please select correct role !";
+            }
+            ViewBag.Roles = roleManager.Roles.Where(i => !i.Name.Contains("Admin")).ToList();
+            return View();
         }
 
 

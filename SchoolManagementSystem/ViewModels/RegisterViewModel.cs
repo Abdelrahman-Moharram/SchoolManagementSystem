@@ -19,6 +19,8 @@ namespace SchoolManagementSystem.ViewModels
         public string PhoneNumber { get; set; }
         public string? Image {  get; set; }
 
+        public string Type { get; set; } 
+
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

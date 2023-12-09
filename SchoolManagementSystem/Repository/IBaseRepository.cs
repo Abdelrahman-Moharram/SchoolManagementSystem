@@ -7,5 +7,8 @@ namespace SchoolManagementSystem.Repository
         Task<List<T>> GetAll();  
         Task<T> GetById(string id);
         Task<List<T>> FindAll(Expression<Func<T, bool>> expression);
+        void Add(T t);
+        void Save();
+
     }
 }

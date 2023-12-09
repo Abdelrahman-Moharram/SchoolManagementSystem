@@ -43,7 +43,17 @@
 
                                     </div>
                                 </div>
-                                
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <select asp-for="Type" class="form-control border-0" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))" placeholder="Register as">
+                                            <option></option>
+                                        </select>
+                                        <label asp-for="Type">Register as</label>
+                                        <span asp-validation-for="Type" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input asp-for="Image" type="file" onchange="DisplayImg()" id="ImageField" class="form-control border-0" placeholder="Image">
@@ -52,6 +62,7 @@
 
                                     </div>
                                 </div>
+                                
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input asp-for="Password" class="form-control border-0" placeholder="Password">
@@ -67,6 +78,8 @@
                                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                     </div>
                                 </div>
+
+                                
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100 py-3" type="submit">Submit</button>
                                 </div>

@@ -25,5 +25,13 @@ namespace SchoolManagementSystem.Repository
         {
             return await Task.FromResult(context.Set<T>().Where(expression).ToList());
         }
+        public async void Add(T t)
+        {
+            await context.Set<T>().AddAsync(t);
+        }
+        public void Save()
+        {
+            context.SaveChanges();
+        }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SchoolManagementSystem.Configurations;
 using SchoolManagementSystem.Models;
-using System.Collections.Generic;
-using SchoolManagementSystem.ViewModels;
+
 
 namespace SchoolManagementSystem.Data
 {
@@ -19,10 +19,14 @@ namespace SchoolManagementSystem.Data
         {
             base.OnModelCreating(builder);
 
-            // entity configurations
-
+            // entities configurations
             new ApplicationUserConfigurations().Configure(builder.Entity<ApplicationUser>());
-
+            new ClassroomConfigurations().Configure(builder.Entity<Classroom>());
+            new ExamConfigurations().Configure(builder.Entity<Exam>());
+            new LevelConfigurations().Configure(builder.Entity<Level>());
+            new StudentConfigurations().Configure(builder.Entity<Student>());
+            new SubjectConfigurations().Configure(builder.Entity<Subject>());
+            new TeacherConfigurations().Configure(builder.Entity<Teacher>());
 
 
             // Identity Tables

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Models;
+using SchoolManagementSystem.Repository;
 
 namespace SchoolManagementSystem
 {
@@ -13,7 +14,7 @@ namespace SchoolManagementSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));   
             //-- Add Identity 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
                 ).AddEntityFrameworkStores<ApplicationDbContext>();

@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Add To Role";
+}
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="bg-light rounded">
+            <div class="row g-0">
+                <div class="col-12 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="h-100 d-flex flex-column justify-content-center p-5">
+                        <h1 class="mb-4">Join Us</h1>
+                        <form method="post">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select name="roleType" id="roleType" class="form-control border-0" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))" placeholder="Register as">
+                                        <option></option>
+                                    </select>
+                                    <label for="roleType">Register as</label>
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3" type="submit">Submit</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
