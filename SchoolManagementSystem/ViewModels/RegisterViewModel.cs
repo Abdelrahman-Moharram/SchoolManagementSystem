@@ -17,8 +17,9 @@ namespace SchoolManagementSystem.ViewModels
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
-        public string? Image {  get; set; }
 
+        [Required(AllowEmptyStrings =true)]
+        
         public string Type { get; set; } 
 
         [DataType(DataType.Password)]

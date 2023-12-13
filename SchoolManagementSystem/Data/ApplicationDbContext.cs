@@ -27,7 +27,8 @@ namespace SchoolManagementSystem.Data
             new StudentConfigurations().Configure(builder.Entity<Student>());
             new SubjectConfigurations().Configure(builder.Entity<Subject>());
             new TeacherConfigurations().Configure(builder.Entity<Teacher>());
-
+            new RegisterCompleteConfigurations().Configure(builder.Entity<RegisterComplete>());
+            
 
             // Identity Tables
             builder.Entity<ApplicationUser>().ToTable("Users", schema: "Identity");
@@ -82,8 +83,8 @@ namespace SchoolManagementSystem.Data
                         NormalizedEmail = "admin@site.com",
                         EmailConfirmed= true,
                         PasswordHash = hasher.HashPassword(null, "12345678"),
-                        SecurityStamp = string.Empty
-
+                        SecurityStamp = string.Empty,
+                        Image="img/users/user.webp"
                     });
 
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
@@ -94,6 +95,8 @@ namespace SchoolManagementSystem.Data
 
 
         }
+        public DbSet<SchoolManagementSystem.Models.Student> Student { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.Models.Teacher> Teacher { get; set; } = default!;
 
     }
 }

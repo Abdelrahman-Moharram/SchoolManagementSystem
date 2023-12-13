@@ -10,6 +10,9 @@ namespace SchoolManagementSystem.Configurations
         {
             builder.Property(i => i.Grade).HasColumnType("decimal(18, 2)");
             builder.Property(i => i.MinGrade).HasColumnType("decimal(18, 2)");
+            builder
+            .Property(i => i.IsDeleted)
+            .HasDefaultValue(false);
 
         }
     }

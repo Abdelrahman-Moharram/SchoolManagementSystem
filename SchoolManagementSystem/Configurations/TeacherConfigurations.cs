@@ -10,6 +10,9 @@ namespace SchoolManagementSystem.Configurations
         public void Configure(EntityTypeBuilder<Teacher> builder)
         {
             builder.Property(i => i.Salary).HasColumnType("money");
+            builder
+            .Property(i => i.IsDeleted)
+            .HasDefaultValue(false);
         }
     }
 

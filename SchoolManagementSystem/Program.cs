@@ -22,7 +22,7 @@ namespace SchoolManagementSystem
             //-- DbContext and Connection String
             builder.Services.AddDbContext<ApplicationDbContext>(options=>
                 options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-            );
+                ,ServiceLifetime.Scoped);
 
 
             var app = builder.Build();

@@ -10,6 +10,7 @@
             <a href="index.html" class="nav-item nav-link active">Home</a>
             <a href="about.html" class="nav-item nav-link">About Us</a>
             <a href="classes.html" class="nav-item nav-link">Classes</a>
+            
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                 <div class="dropdown-menu rounded-0 rounded-bottom border-0 shadow-sm m-0">
@@ -21,14 +22,16 @@
                     <a href="404.html" class="dropdown-item">404 Error</a>
                 </div>
             </div>
-            <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+            @if(User.IsInRole("Admin")){
+                <a asp-controller="Admin" asp-action="Index" class="nav-item nav-link">Admin</a>
+            }
         </div>
         @if (User.Identity.IsAuthenticated)
         {
             <div class="nav-item dropdown">
 
-                <a  class="btn btn-primary rounded-pill px-1  d-flex justify-content-center align-items-center d-lg-block dropdown-toggle" style="width:150px" data-bs-toggle="dropdown"> 
                     
+                <a  class="btn btn-primary rounded-pill px-1  d-flex justify-content-center align-items-center d-lg-block dropdown-toggle" style="width:150px" data-bs-toggle="dropdown">
                         <img src="/@User.Claims.FirstOrDefault(i => i.Type == "Image")?.Value" class="avatar" />
                         <span>@User.Identity.Name</span>
                     </a>

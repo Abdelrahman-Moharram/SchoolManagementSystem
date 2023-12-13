@@ -10,6 +10,7 @@ namespace SchoolManagementSystem.Models
         public string Id {get; set;} = Guid.NewGuid().ToString();
         public virtual List<Student>? Students {get; set;}
         public virtual List<Subject>? Subjects {get; set;}
+        public bool IsDeleted { get; set; }
 
     }
 }

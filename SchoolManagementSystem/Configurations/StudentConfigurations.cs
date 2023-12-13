@@ -9,7 +9,9 @@ namespace SchoolManagementSystem.Configurations
     {
         public void Configure(EntityTypeBuilder<Student> builder)
         {
-
+            builder
+            .Property(i => i.IsDeleted)
+            .HasDefaultValue(false);
         }
     }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using SchoolManagementSystem.Data;
 namespace SchoolManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231212070248_AddImageAndTypeToRegisterComplete")]
+    partial class AddImageAndTypeToRegisterComplete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,19 +57,19 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2c18ee41-fe9d-4f8d-8cf8-eb2aa8804b37",
+                            Id = "2c683756-03de-40a7-b3dd-4e6728b1117d",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "3c4ccc37-e66b-4f33-b992-7b910513102d",
+                            Id = "2a8cf546-2556-4056-af3d-68a48bb73920",
                             Name = "Teacher",
                             NormalizedName = "Teacher"
                         },
                         new
                         {
-                            Id = "d09cf9bd-b010-4cbf-bfac-7f65c052db5a",
+                            Id = "d5ac4ec2-c190-4924-8a77-d55ae18b7a6b",
                             Name = "Student",
                             NormalizedName = "Student"
                         });
@@ -161,8 +164,8 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "1d3c0ff7-8425-4fc0-b624-e8bc6d99ee0c",
-                            RoleId = "2c18ee41-fe9d-4f8d-8cf8-eb2aa8804b37"
+                            UserId = "1f3aac04-90e5-494d-b021-fc4b4d15d9c4",
+                            RoleId = "2c683756-03de-40a7-b3dd-4e6728b1117d"
                         });
                 });
 
@@ -264,16 +267,16 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1d3c0ff7-8425-4fc0-b624-e8bc6d99ee0c",
+                            Id = "1f3aac04-90e5-494d-b021-fc4b4d15d9c4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3c2f8187-e6ee-48fb-8b8d-db81428d643e",
+                            ConcurrencyStamp = "5bad9955-8f3a-45f5-a5ef-8c958097485d",
                             Email = "admin@site.com",
                             EmailConfirmed = true,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@site.com",
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIkhRMzvZHFbNOFkudZw1W64gVFmKjxdehScpzPo+CaUENOqnUvL9nVWKrb5d819fQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAgQ7jHPw+DVuVAJlKoCG3Sy6EVDI6Pm7Xfr3Cz0MzKoU+IRR3RMR4aye+VinY4n6Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -391,6 +394,15 @@ namespace SchoolManagementSystem.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserType")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

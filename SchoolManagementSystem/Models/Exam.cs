@@ -11,6 +11,7 @@
         public decimal? MinGrade { get; set; }
 
         public virtual Teacher? Teacher { get; set; }
+        public bool IsDeleted { get; set; }
 
     }
 }

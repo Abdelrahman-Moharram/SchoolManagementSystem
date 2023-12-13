@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using SchoolManagementSystem.Data;
 namespace SchoolManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210104844_AddIsDoneAttrToRegisterComplete")]
+    partial class AddIsDoneAttrToRegisterComplete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,19 +57,19 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2c18ee41-fe9d-4f8d-8cf8-eb2aa8804b37",
+                            Id = "2b82f922-2c17-4293-bfc1-0b775ceb2a25",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "3c4ccc37-e66b-4f33-b992-7b910513102d",
+                            Id = "5e2157b3-4c3e-4045-a090-204fe04709e8",
                             Name = "Teacher",
                             NormalizedName = "Teacher"
                         },
                         new
                         {
-                            Id = "d09cf9bd-b010-4cbf-bfac-7f65c052db5a",
+                            Id = "301a261e-b20f-49b0-b4ce-8f64629fea17",
                             Name = "Student",
                             NormalizedName = "Student"
                         });
@@ -161,8 +164,8 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "1d3c0ff7-8425-4fc0-b624-e8bc6d99ee0c",
-                            RoleId = "2c18ee41-fe9d-4f8d-8cf8-eb2aa8804b37"
+                            UserId = "745cbd15-8258-4374-b5ce-9149bbae270b",
+                            RoleId = "2b82f922-2c17-4293-bfc1-0b775ceb2a25"
                         });
                 });
 
@@ -264,16 +267,16 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1d3c0ff7-8425-4fc0-b624-e8bc6d99ee0c",
+                            Id = "745cbd15-8258-4374-b5ce-9149bbae270b",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3c2f8187-e6ee-48fb-8b8d-db81428d643e",
+                            ConcurrencyStamp = "5ea3fe79-31e2-4d1d-a700-ff90ae1e4cfc",
                             Email = "admin@site.com",
                             EmailConfirmed = true,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@site.com",
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIkhRMzvZHFbNOFkudZw1W64gVFmKjxdehScpzPo+CaUENOqnUvL9nVWKrb5d819fQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOosHybMN4tmuygvbBdhd7BL1ZvpTmsyanAqMnFyvJJdpAQnEXf3RW/L2F4Wj8KWVw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -391,6 +394,9 @@ namespace SchoolManagementSystem.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

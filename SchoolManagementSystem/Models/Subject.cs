@@ -20,6 +20,7 @@ namespace SchoolManagementSystem.Models
         public virtual Teacher? Teacher { get; set;}
 
         public virtual List<Exam>? Exams { get; set;}
+        public bool IsDeleted { get; set; }
 
     }
 }

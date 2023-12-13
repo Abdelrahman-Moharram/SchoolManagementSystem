@@ -13,6 +13,7 @@ namespace SchoolManagementSystem.Models
 
         public virtual List<Classroom>? Classrooms { get; set;}
         public virtual List<Subject>? subjects { get; set; }
+        public bool IsDeleted { get; set; }
 
     }
 }

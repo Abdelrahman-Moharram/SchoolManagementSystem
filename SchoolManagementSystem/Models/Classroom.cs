@@ -17,7 +17,8 @@ namespace SchoolManagementSystem.Models
         public virtual List<Student>? students {get; set;}
 
         public int capacity {get; set;}
-        
+
+        public bool IsDeleted { get; set; }
 
     }
 }

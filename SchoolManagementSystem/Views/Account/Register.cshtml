@@ -56,10 +56,8 @@
 
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input asp-for="Image" type="file" onchange="DisplayImg()" id="ImageField" class="form-control border-0" placeholder="Image">
-                                        <label asp-for="Image"></label>
-                                        <span asp-validation-for="Image" class="text-danger"></span>
-
+                                        <input name="Image" type="file" onchange="DisplayImg()" id="ImageField" class="form-control border-0" placeholder="Image">
+                                        <label for="ImageField">Image</label>
                                     </div>
                                 </div>
                                 

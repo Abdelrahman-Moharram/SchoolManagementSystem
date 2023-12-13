@@ -1,0 +1,48 @@
+﻿@model Student
+
+@{
+    ViewData["Title"] = "Add Student";
+}
+
+<h1 class="text-center my-5">Add @Model?.User?.UserName as a  Student</h1>
+
+<hr />
+<div class="row justify-content-center my-5">
+    <div class="col-md-4">
+        <form asp-action="AddStudent">
+            
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <div class="form-group mb-4">
+                <label asp-for="ClassroomId" class="control-label"></label>
+                <select asp-for="ClassroomId" class="form-control" >
+                    <option></option>
+
+                    @foreach (var item in ViewBag.Classrooms)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+
+                    }
+                </select>
+            </div>
+            <input name="UserId" value="@Model?.UserId" hidden/>
+            <input name="Id" value="@Model?.Id" hidden/>
+            <div class="form-group">
+                <label for="IsDone" class="control-label">Is Done</label>
+                <input type="checkbox" id="IsDone"  class="form-check" name="IsDone" value="true"/>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary float-end" />
+            </div>
+        </form>
+    </div>
+    <div class="text-center">
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
