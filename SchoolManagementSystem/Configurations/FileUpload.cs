@@ -2,12 +2,12 @@
 {
     public class FileUpload
     {
-        public string UploadUserImage(IFormFile Image, string inst_Image)
+        public string UploadUserImage(IFormFile Image, string inst_Image= "img/users/user.webp")
         {
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Image.FileName);
 
-            if (Image != null && inst_Image != "img/users/" + fileName)
+            if (Image != null)
             {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Image.FileName);
 
                 var imagePath = Path.Combine("wwwroot", "img", "users", fileName);
 

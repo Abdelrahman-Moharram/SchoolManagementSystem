@@ -18,7 +18,7 @@
         "hotReloadProfile": "aspnetcore"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7200;http://localhost:5029"
+      "applicationUrl": "https://192.168.1.105:7200;http://192.168.1.105:5029"
     },
     "IIS Express": {
       "commandName": "IISExpress",

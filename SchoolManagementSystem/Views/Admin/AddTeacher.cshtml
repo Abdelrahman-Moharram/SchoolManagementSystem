@@ -1,33 +1,98 @@
-﻿@model Teacher
+﻿@model SchoolManagementSystem.ViewModels.TeacherViewModel
 
 @{
-    ViewData["Title"] = "Add Teacher";
+    ViewData["Title"] = "AddTeacher";
 }
 
-<h1 class="text-center my-5">Add @Model?.User?.UserName as a  Teacher</h1>
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="bg-light rounded">
+            <div class="row g-0">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="h-100 d-flex flex-column justify-content-center p-5">
+                        <h1 class="mb-4">@Model.UserName enrolled as @Model.RoleName</h1>
+                        <form asp-action="AddTeacher" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input asp-for="UserId" class="form-control" hidden />
+                            <input asp-for="TeacherId" class="form-control" hidden />
 
-<hr />
-<div class="row justify-content-center my-5">
-    <div class="col-md-4">
-        <form asp-action="AddTeacher">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           
-            <div class="form-group mb-4">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
+                            
+                            <div class="form-group mb-4">
+                                <label asp-for="UserName" class="control-label"></label>
+                                <input asp-for="UserName" class="form-control" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Image" class="control-label"></label>
+                                <input asp-for="Image" type="file" class="form-control" />
+                                <span asp-validation-for="Image" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="PhoneNumber" class="control-label"></label>
+                                <input asp-for="PhoneNumber" class="form-control" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="RoleName" class="control-label"></label>
+                                <select asp-for="RoleName" class="form-control">
+                                    @foreach (var item in ViewBag.Roles)
+                                    {
+                                        @if (Model?.RoleName?.Contains(item.Name))
+                                        {
+                                            <option selected value="@item.Id">@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="RoleName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Salary" class="control-label"></label>
+                                <input asp-for="Salary" class="form-control" />
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <input asp-for="IsDone" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsDone" class="control-label">Mark as Done</label>
+                                <span asp-validation-for="IsDone" class="text-danger"> </span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6 my-5 py-5 wow fadeIn" data-wow-delay="0.5s" style="min-height: 400px;">
+                    <div class="position-relative my-5 py-5 h-100">
+                        <img id="ImgElement" class="position-absolute w-100 h-100 rounded" src="/@Model.Image" style="object-fit: cover;">
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-    <div class="text-center">
-        <a asp-action="Index">Back to List</a>
+        </div>
     </div>
 </div>
-
+<script>
+    const imgInp = document.getElementById("ImageField");
+    const ImgElement = document.getElementById("ImgElement");
+    imgInp.onchange = evt => {
+        const [file] = imgInp.files
+        if (file) {
+            ImgElement.src = URL.createObjectURL(file)
+        }
+    }
+</script>
+<div class="text-center">
+    <a asp-action="NewRegisters">Back to List</a>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Configurations;
 using SchoolManagementSystem.Models;
+using SchoolManagementSystem.ViewModels;
 
 
 namespace SchoolManagementSystem.Data
@@ -97,6 +98,8 @@ namespace SchoolManagementSystem.Data
         }
         public DbSet<SchoolManagementSystem.Models.Student> Student { get; set; } = default!;
         public DbSet<SchoolManagementSystem.Models.Teacher> Teacher { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.ViewModels.TeacherViewModel> TeacherViewModel { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.ViewModels.StudentUserViewModel> StudentUserViewModel { get; set; } = default!;
 
     }
 }

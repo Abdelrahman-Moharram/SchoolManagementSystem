@@ -82,7 +82,8 @@ namespace SchoolManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel, IFormFile Image)
         {
-            if(ModelState.IsValid)
+            ModelState.Remove("Image");
+            if (ModelState.IsValid)
             {
                 var uploadImage = new FileUpload();
                 
@@ -91,7 +92,7 @@ namespace SchoolManagementSystem.Controllers
                     Email = registerViewModel.Email,
                     UserName = registerViewModel.UserName,
                     PhoneNumber = registerViewModel.PhoneNumber,
-                    Image =  uploadImage.UploadUserImage(Image, "img/users/user.webp"),
+                    Image =  uploadImage.UploadUserImage(Image),
                 };
 
                 IdentityResult result =  await userManager.CreateAsync(user, registerViewModel.Password);
