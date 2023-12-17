@@ -13,6 +13,9 @@ namespace SchoolManagementSystem.Configurations
             builder
             .Property(i => i.IsDeleted)
             .HasDefaultValue(false);
+            builder
+                .HasMany(i => i.Subjects)
+                .WithMany(i => i.Teacher);
         }
     }
 

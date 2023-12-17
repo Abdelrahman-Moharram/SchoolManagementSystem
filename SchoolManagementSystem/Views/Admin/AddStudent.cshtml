@@ -1,7 +1,8 @@
 ﻿@model SchoolManagementSystem.ViewModels.StudentUserViewModel
 
 @{
-    ViewData["Title"] = "AddStudent";
+    ViewData["Title"] = "Add Student";
+    Layout = "_AdminLayout";
 }
 
 <div class="container-fluid py-5">
@@ -53,9 +54,35 @@
                                 </select>
                                 <span asp-validation-for="RoleName" class="text-danger"></span>
                             </div>
+                            
                             <div class="form-group mb-4">
-                                <label asp-for="ClassroomId" class="control-label"></label>
-                                <select asp-for="ClassroomId" class="form-control">
+                                <label asp-for="LevelId" class="control-label">Level</label>
+                                <select  asp-for="LevelId" onchange="setClass()" id="LevelId" class="form-control">
+                                    <option value=""></option>
+
+                                    @foreach (var item in ViewBag.Levels)
+                                    {
+                                        @if (Model?.LevelId == item.Id)
+                                        {
+                                            <option selected value="@item.Id">@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            
+                                            <option value="@item.Id">@item.Name</option>
+                                            
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="ClassroomId" class="text-danger"></span>
+                            </div>
+                            
+                            
+                            <div class="form-group mb-4">
+                                <label asp-for="ClassroomId" class="control-label">Classroom</label>
+                                <select asp-for="ClassroomId" id="ClassroomId" class="form-control">
+                                    <option value=""></option>
+
                                     @foreach (var item in ViewBag.Classrooms)
                                     {
                                         @if (Model?.ClassroomId == item.Id)
@@ -64,10 +91,7 @@
                                         }
                                         else
                                         {
-                                            @if (Model?.RoleName?.Contains(item.Name.ToLower()))
-                                            {
                                                 <option value="@item.Id">@item.Name</option>
-                                            }
                                         }
                                     }
                                 </select>
@@ -95,6 +119,25 @@
     </div>
 </div>
 <script>
+
+    async function  setClass(){
+
+        const levelId = document.getElementById("LevelId").value
+        console.log("123", levelId)
+        fetch("/Admin/Classrooms/" + levelId).then(response => {
+            return response.json()
+        }).then(data => {
+            const selectInput = document.getElementById("ClassroomId");
+            selectInput.innerHTML = `<option></option>`;
+            for (var item of data) {
+                console.log(selectInput);
+                selectInput.innerHTML += `
+                            <option value = "${item['id']}">${item['name']}</option>
+                    `;
+            }
+        }).catch(err=>console.log("err=> ",err))
+        
+    }
     const imgInp = document.getElementById("ImageField");
     const ImgElement = document.getElementById("ImgElement");
     imgInp.onchange = evt => {
@@ -103,11 +146,13 @@
             ImgElement.src = URL.createObjectURL(file)
         }
     }
+        
 </script>
 <div class="text-center">
     <a asp-action="NewRegisters">Back to List</a>
 </div>
 
+@* 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+} *@

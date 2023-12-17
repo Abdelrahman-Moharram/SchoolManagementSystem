@@ -1,12 +1,12 @@
 ﻿@model List<NotCompletelyRegisteredUser>
 @{
-    ViewData["Title"] = "NewRegisters";
+    ViewData["Title"] = "New Registers";
+    Layout = "_AdminLayout";
+
 }
 
 <h1 class="text-center">New Registers</h1>
 
-<div class="container">
-    <div class="row">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link @(ViewContext.RouteData.Values["done"]==null?"active":"")" href="/Admin/New-Registers">Not Completed</a>
@@ -16,50 +16,55 @@
                 <a class="nav-link @(ViewContext.RouteData.Values["done"]!=null?"active":"")" href="/Admin/New-Registers/Done" tabindex="-1" aria-disabled="true">Completed</a>
             </li>
         </ul>
-        @foreach(var item in Model){
-            <div class="col-lg-4 col-md-6 wow fadeInUp bg-dark" data-wow-delay="0.1s">
-                <div class="classes-item">
-                    <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                        <img class="img-fluid rounded-circle" src="img/classes-1.jpg" alt="">
-                    </div>
-                    <div class="bg-light rounded p-4 pt-5 mt-n5">
-                        <a class="d-block text-center h3 mt-3 mb-4" asp-action="CompleteUserData" asp-route-id="@item.Id">@item.UserName</a>
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="d-flex align-items-center">
-                                <img class="rounded-circle flex-shrink-0" src="/@item.Image" alt="" style="width: 45px; height: 45px;">
-                                <div class="ms-3">
-                                    <h6 class="text-primary mb-1">@item.Role</h6>
-                                    <small></small>
-                                </div>
+        @if(Model.Count > 0){
+            <div class="row">
 
-                            </div>
-                            <span class="bg-primary text-white rounded-pill py-2 px-3" style="font-size:9px" href="">@(item.IsDone==true ?"Completed":"Not Completed")</span>
+            @foreach(var item in Model){
+                <div class="col-lg-4 col-md-6 wow fadeInUp bg-dark" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
+                            <img class="img-fluid rounded-circle" src="img/classes-1.jpg" alt="">
                         </div>
-                        <div class="row g-1">
-                            <div class="col-4">
-                                <div class="border-top border-3 border-primary pt-2">
-                                    <h6 class="text-primary mb-1">Year:</h6>
-                                    <small>@item.DateTime.Year</small>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" asp-action="CompleteUserData" asp-route-id="@item.Id">@item.UserName</a>
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle flex-shrink-0" src="/@item.Image" alt="" style="width: 45px; height: 45px;">
+                                    <div class="ms-3">
+                                        <h6 class="text-primary mb-1">@item.Role</h6>
+                                        <small></small>
+                                    </div>
+
                                 </div>
+                                <span class="bg-primary text-white rounded-pill py-2 px-3" style="font-size:9px" href="">@(item.IsDone==true ?"Completed":"Not Completed")</span>
                             </div>
-                            <div class="col-4">
-                                <div class="border-top border-3 border-success pt-2">
-                                    <h6 class="text-success mb-1">Day/Month:</h6>
-                                    <small>@item.DateTime.Day/@item.DateTime.Month</small>
+                            <div class="row g-1">
+                                <div class="col-4">
+                                    <div class="border-top border-3 border-primary pt-2">
+                                        <h6 class="text-primary mb-1">Year:</h6>
+                                        <small>@item.DateTime.Year</small>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="border-top border-3 border-warning pt-2">
-                                    <h6 class="text-warning mb-1">Time:</h6>
-                                    <small>@item.DateTime.Hour:@item.DateTime.Minute</small>
+                                <div class="col-4">
+                                    <div class="border-top border-3 border-success pt-2">
+                                        <h6 class="text-success mb-1">Day/Month:</h6>
+                                        <small>@item.DateTime.Day/@item.DateTime.Month</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="border-top border-3 border-warning pt-2">
+                                        <h6 class="text-warning mb-1">Time:</h6>
+                                        <small>@item.DateTime.Hour:@item.DateTime.Minute</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+        
+            }
             </div>
     
+        }else{
+            <h1 class="text-center mt-5">No New Registers</h1>
         }
-    
-    </div>
-</div>

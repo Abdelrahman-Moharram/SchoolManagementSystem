@@ -13,6 +13,17 @@ namespace SchoolManagementSystem.Configurations
             builder
             .Property(i => i.IsDeleted)
             .HasDefaultValue(false);
+
+
+            builder
+                .HasMany(i => i.Classes)
+                .WithMany(i => i.Subjects)
+                /*.UsingEntity<SubjectClassroomTeacher>(
+                    i => i.HasOne(s => s.classroom).WithMany().HasForeignKey(i => i.ClassroomId),
+                    i => i.HasOne(s => s.subject).WithMany().HasForeignKey(i => i.SubjectId),
+                    i => i.HasOne(s => s.Teacher).WithMany().HasForeignKey(i => i.TeacherId)
+                )*/
+                ;
         }
     }
 

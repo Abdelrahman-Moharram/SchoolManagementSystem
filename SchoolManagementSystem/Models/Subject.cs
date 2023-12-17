@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Models
 {
@@ -10,17 +6,25 @@ namespace SchoolManagementSystem.Models
         public string Id {get; set;} = Guid.NewGuid().ToString();
         public string? Name { get; set;}
         public decimal? Grade { get; set;}
+        public bool IsDeleted { get; set; }
+        public string? subjectCategoryId {get; set;}
+        public virtual SubjectCategory? subjectCategory {get; set;}
+        public virtual List<Teacher>? Teacher { get; set;}
+        public virtual List<Classroom>? Classes { get; set;}
+        public virtual List<SubjectClassroomTeacher>? subjectClassroomTeacher { get; set;}
+
+
+
+
+
 
         public string? levelId { get; set;}
         public virtual Level? level { get; set;}
 
         public virtual List<Student>? students { get; set;}
 
-        public string? TeacherId  { get; set;}
-        public virtual Teacher? Teacher { get; set;}
 
         public virtual List<Exam>? Exams { get; set;}
-        public bool IsDeleted { get; set; }
 
     }
 }

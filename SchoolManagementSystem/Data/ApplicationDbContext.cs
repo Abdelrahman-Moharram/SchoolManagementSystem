@@ -31,6 +31,9 @@ namespace SchoolManagementSystem.Data
             new RegisterCompleteConfigurations().Configure(builder.Entity<RegisterComplete>());
             
 
+
+            builder.Entity<SubjectClassroomTeacher>().HasKey(x=>new {x.SubjectId, x.ClassroomId, x.TeacherId});
+
             // Identity Tables
             builder.Entity<ApplicationUser>().ToTable("Users", schema: "Identity");
             builder.Entity<IdentityRole>().ToTable("Roles", schema: "Identity");
@@ -39,6 +42,8 @@ namespace SchoolManagementSystem.Data
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins", schema: "Identity");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", schema: "Identity");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", schema: "Identity");
+
+
 
 
             // data seedding
@@ -95,11 +100,15 @@ namespace SchoolManagementSystem.Data
             });
 
 
+
         }
         public DbSet<SchoolManagementSystem.Models.Student> Student { get; set; } = default!;
         public DbSet<SchoolManagementSystem.Models.Teacher> Teacher { get; set; } = default!;
-        public DbSet<SchoolManagementSystem.ViewModels.TeacherViewModel> TeacherViewModel { get; set; } = default!;
-        public DbSet<SchoolManagementSystem.ViewModels.StudentUserViewModel> StudentUserViewModel { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.Models.SubjectCategory> SubjectCategory { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.Models.Level> Level { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.Models.Subject> Subject { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.Models.Classroom> Classroom { get; set; } = default!;
+
 
     }
 }

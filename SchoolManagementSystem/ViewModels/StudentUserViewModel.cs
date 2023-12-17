@@ -18,6 +18,7 @@ namespace SchoolManagementSystem.ViewModels
         [DataType(DataType.PhoneNumber)]
         public string? PhoneNumber {get; set;}
         public string? RoleName {get; set;}
+        public string? LevelId { get; set; }
         public string? ClassroomId { get; set;}
         public bool IsDone { get; set;}
 

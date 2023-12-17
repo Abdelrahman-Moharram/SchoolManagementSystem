@@ -13,7 +13,11 @@ namespace SchoolManagementSystem
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            ); 
+            builder.Services.AddSession();
+
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));   
             //-- Add Identity 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
@@ -39,6 +43,7 @@ namespace SchoolManagementSystem
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

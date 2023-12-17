@@ -8,9 +8,12 @@ namespace SchoolManagementSystem.Models
     public class StudentsSubjects
     {
         public string Id {get; set;} = Guid.NewGuid().ToString();
-        public virtual List<Student>? Students {get; set;}
-        public virtual List<Subject>? Subjects {get; set;}
+        public string? StudentId {get; set;}
+        public virtual Student? Student {get; set;}
+        public string? SubjectId {get; set;}
+        public virtual Subject? Subject { get; set;}
+        public virtual decimal TotalGrade {get; set; }
         public bool IsDeleted { get; set; }
-
+        
     }
 }

@@ -15,6 +15,9 @@ namespace SchoolManagementSystem.Models
         public virtual Level? level {get; set;}
 
         public virtual List<Student>? students {get; set;}
+        public virtual List<Teacher>? Teachers {get; set;}
+        public virtual List<Subject>? Subjects {get; set;}
+        public virtual List<SubjectClassroomTeacher>? subjectClassroomTeacher { get; set;}
 
         public int capacity {get; set;}
 

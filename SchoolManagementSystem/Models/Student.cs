@@ -12,7 +12,8 @@ namespace SchoolManagementSystem.Models
         public string? ClassroomId { get; set;}
         public virtual Classroom? Classroom { get; set;}
 
-
+        public string? LevelId { get; set;}
+        public virtual Level? Level { get; set;}
         public string? UserId { get; set;}
         public virtual ApplicationUser? User { get; set;}
 

@@ -1,7 +1,8 @@
 ﻿@model SchoolManagementSystem.ViewModels.TeacherViewModel
 
 @{
-    ViewData["Title"] = "AddTeacher";
+    ViewData["Title"] = "Add Teacher";
+    Layout = "_AdminLayout";
 }
 
 <div class="container-fluid py-5">
@@ -94,6 +95,6 @@
     <a asp-action="NewRegisters">Back to List</a>
 </div>
 
-@section Scripts {
+@* @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+} *@

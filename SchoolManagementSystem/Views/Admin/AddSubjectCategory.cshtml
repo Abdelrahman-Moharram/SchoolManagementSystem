@@ -1,0 +1,32 @@
+﻿@model SchoolManagementSystem.Models.SubjectCategory
+
+@{
+    ViewData["Title"] = "AddSubjectCategory";
+    Layout = "_AdminLayout";
+}
+
+<h1>Subject Categories</h1>
+
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="AddSubjectCategory">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group d-flex justify-content-center w-50">
+                <input asp-for="Name" class="form-control" placeholder="Name" />
+                <input type="submit" value="Add" class="btn btn-primary mx-3" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+           
+        </form>
+    </div>
+    <div class="col-12">
+        @foreach(var item in ViewBag.Categories)
+        {
+            <p class="link-primary">@item.Name</p>
+        }
+    </div>
+ </div>
+
+
+
