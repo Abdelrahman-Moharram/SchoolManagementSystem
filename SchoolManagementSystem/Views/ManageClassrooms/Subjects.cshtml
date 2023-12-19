@@ -1,13 +1,13 @@
-﻿@model List<Subject>
+@model List<Subject>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = @ViewBag.ClassroomName;
     Layout = "_AdminLayout";
 }
 
 
     @if(Model != null)
     {
-    <h1 class="text-center">Subjects List</h1>
+    <h1 class="text-center">@ViewBag.ClassroomName Subjects</h1>
     <hr />
     <div class="row my-5">
 
@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <a asp-action="Subject" asp-route-Name="@item.Name" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <a asp-action="Lectures" asp-route-ClassroomName="@ViewBag.ClassroomName" asp-route-SubjectName="@item.Name" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     @item.Name
                                 </a>
                                 <a class="h5 mb-0 font-weight-bold text-gray-800"></a>

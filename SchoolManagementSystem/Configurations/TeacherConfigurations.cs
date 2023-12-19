@@ -15,7 +15,7 @@ namespace SchoolManagementSystem.Configurations
             .HasDefaultValue(false);
             builder
                 .HasMany(i => i.Subjects)
-                .WithMany(i => i.Teacher);
+                .WithMany(i => i.Teachers);
         }
     }
 

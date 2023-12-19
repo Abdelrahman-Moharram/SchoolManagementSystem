@@ -8,8 +8,8 @@ using SchoolManagementSystem.Configurations;
 namespace SchoolManagementSystem.Controllers
 {
 
-    [Authorize]
-    public class StudentController : Controller
+    [Authorize(Roles ="Student")]
+    public class ClassroomController : Controller
     {
         private readonly IBaseRepository<Teacher>                       teacherRepository;
         private readonly IBaseRepository<Student>                       studentRepository;
@@ -19,10 +19,10 @@ namespace SchoolManagementSystem.Controllers
         private readonly IBaseRepository<SubjectCategory>               subjectCategoryRepository;
         private readonly IBaseRepository<Lecture>                       LectureRepository;
         private readonly IBaseRepository<LecturePost>                   LecturePostRepository; 
-        private readonly UserManager<ApplicationUser>                   userManager;
         private readonly IBaseRepository<SubjectClassroomTeacher>       SubjectClassroomTeacherRepository;
+        private readonly UserManager<ApplicationUser>                   userManager;
 
-        public StudentController(
+        public ClassroomController(
             IBaseRepository<Teacher>                        _teacherRepository,
             IBaseRepository<Student>                        _studentRepository,
             IBaseRepository<Classroom>                      _classRoomRepository,
@@ -31,8 +31,8 @@ namespace SchoolManagementSystem.Controllers
             IBaseRepository<SubjectCategory>                _subjectCategoryRepository,
             IBaseRepository<Lecture>                        _LectureRepository,
             IBaseRepository<LecturePost>                    _LecturePostRepository,
-            UserManager<ApplicationUser>                    _userManager,
-            IBaseRepository<SubjectClassroomTeacher>        _SubjectClassroomTeacherRepository
+            IBaseRepository<SubjectClassroomTeacher>        _SubjectClassroomTeacherRepository,
+            UserManager<ApplicationUser>                    _userManager
 
             )
         {
@@ -44,99 +44,85 @@ namespace SchoolManagementSystem.Controllers
             subjectCategoryRepository                       = _subjectCategoryRepository;
             LectureRepository                               = _LectureRepository;
             LecturePostRepository                           = _LecturePostRepository;
-            userManager                                     = _userManager;
             SubjectClassroomTeacherRepository               = _SubjectClassroomTeacherRepository;
+            userManager                                     = _userManager;
         }
+
+        // list Subjects in Classroom
+        [Route("/Classroom")]
+
         public async Task<IActionResult> Index()
         {
-            var userId = User.Claims.FirstOrDefault(i => i.Type == "Id"); 
-            if ( userId == null )
+            var StudentId = User.Claims.FirstOrDefault(i => i.Type == "StudentId")?.Value; 
+            if (StudentId != null )
             {
-                return RedirectToAction("Logout", "Account");
+                var student = await studentRepository.GetById(StudentId);
+                ViewBag.Classroom = student.Classroom?.Name;
+                return View(student?.Classroom?.Subjects?.ToList());
             }
-            var student = await studentRepository.Find(i=>i.UserId== userId.Value);
-            return View(student.Level?.subjects?.ToList());
+            return BadRequest();
         }
-        public async Task<IActionResult> Subject(string Name)
+        
+        // return Subject lectures
+        [Route("/Classroom/{SubjectName}")]
+
+        public async Task<IActionResult> Subject(string SubjectName)
         {
-            var UserName = User?.Identity?.Name;
-            var std = await studentRepository.Find(i=>i.User.UserName == UserName);
-            var subject = await subjectRepository.Find(i=>i.Name == Name);
-            if ( std?.Level.subjects?.Find(i=>i == subject) != null )
+            var StudentId = User.Claims.FirstOrDefault(i => i.Type == "StudentId")?.Value;
+            if (StudentId != null)
             {
-                ViewBag.Subject = Name;
-                return View(await LectureRepository.FindAll(i=>i.SubjectClassroomTeacher.SubjectId == subject.Id));
-
+                var student = await studentRepository.GetById(StudentId);
+                var subject = student?.Subjects?.FirstOrDefault(i => i.Name == SubjectName);
+                if (subject != null)
+                {
+                    ViewBag.SubjectName = SubjectName;
+                    return View(subject.Lectures?.ToList());
+                }
             }
-            return RedirectToAction(nameof(Index));
+            return BadRequest();
         }
 
 
 
 
 
-        [Route("/{Classroom}/Subjects/{Name}/Add")]
-        public async Task<IActionResult> AddLecture(string Name, string Classroom)
+        [Route("/Classroom/{SubjectName}/{LecName}")]
+        // return lecture posts
+        public async Task<IActionResult> Lecture(string SubjectName, string LecName)
         {
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
-            if ( user == null)
+            var StudentId = User.Claims.FirstOrDefault(i => i.Type == "StudentId")?.Value;
+            if (StudentId != null)
             {
-                return NotFound();
-            }
-            var subject = await subjectRepository.Find(i => i.Name == Name);
-            Teacher teacher = await teacherRepository.Find(i=>i.UserId == user.Id);
-            var subClassteacher = await SubjectClassroomTeacherRepository
-                .Find(
-                    i=>
-                    i.classroom.Name== Classroom && 
-                    i.subject.Name == Name && 
-                    i.TeacherId==teacher.Id
-                 );
+            var student = await studentRepository.GetById(StudentId);
+            var subject = student?.Subjects?.FirstOrDefault(i => i.Name == SubjectName);
+                if (subject != null)
+                {
+                    var Lecture =  subject.Lectures?.FirstOrDefault(i=>i.Name == LecName);
+                    if (Lecture != null)
+                    {
+                        var posts = await LecturePostRepository.FindAll(i => i.LectureId == Lecture.Id);
+                        ViewBag.Lecture = LecName;
+                        ViewBag.SubjectName = SubjectName;
+                        return View(posts);
+                    }
 
-            Lecture lec = new Lecture
-            {
-                SubjectClassroomTeacherId = subClassteacher.Id,
-                /*TeacherId = teacher.Id,*/
-            };
-            return PartialView(lec);
+                }
+            }
+            return BadRequest();
+
+            
         }
-        [Route("/Student/Subject/{Name}/Add")]
+
+        [Route("/Classroom/{SubjectName}/{LecName}")]
         [HttpPost]
-        public async Task<IActionResult> AddLecture(string Name, Lecture lecture)
-        {
-            if (ModelState.IsValid)
-            {
-                LectureRepository.Add(lecture);
-                LectureRepository.Save();
-                return RedirectToAction(nameof(Subject), "Student", routeValues: Name);
-            }
-            return View();
-        }
-        [Route("/Student/Subject/{Name}/Lecture/{LecName}")]
-        public async Task<IActionResult> Lecture(string Name, string LecName)
-        {
-            ViewBag.Lecture = LecName;
-            var lecture = await LectureRepository.Find(i => i.Name == LecName);
-            var userId = User?.Claims?.FirstOrDefault(i => i.Type == "Id")?.Value;
-            if (userId == null || lecture == null)
-            {
-                return NotFound();
-            }
-            var posts = await LecturePostRepository.FindAll(i => i.Lecture.Name == LecName);
-
-            return View(posts);
-        }
-
-        [Route("/Student/Subject/{Name}/Lecture/{LecName}")]
-        [HttpPost]
-        public async Task<IActionResult> Lecture(string Name, string LecName, IFormFile File, string Text)
+        public async Task<IActionResult> Lecture(string SubjectName, string LecName, IFormFile File, string Text)
         {
             FileUpload uploadPostFile = new FileUpload();
             var lecture = await LectureRepository.Find(i => i.Name == LecName);
             var userId = User?.Claims?.FirstOrDefault(i => i.Type == "Id")?.Value;
             if (userId == null || lecture == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             LecturePost post = new LecturePost
             {
@@ -148,7 +134,10 @@ namespace SchoolManagementSystem.Controllers
             LecturePostRepository.Add(post);
             LecturePostRepository.Save();
             return RedirectToAction("Lecture");
-                
+
         }
+
+
+
     }
 }

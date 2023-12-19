@@ -33,10 +33,18 @@ function showFile() {
 
         reader.readAsDataURL(input.files[0]);
     }
+} 
+
+
+async function AddModalData(SubjectName, ClassroomName) {
+    console.log(SubjectName);
+    console.log(ClassroomName);
+
+    fetch(`/ManageClassrooms/${ClassroomName}/${SubjectName}/Add`).then(response => {
+        console.log(response);
+        return response.text();
+    }).then(data => {
+        document.getElementById("modal-body").innerHTML = data;
+    })
 }
-async function AddModalData(name) {
-    const response = await fetch("/Student/Subject/" + name + "/Add")
-    const data = await response.text();
-    document.getElementById("modal-body").innerHTML = data;
-}  
 

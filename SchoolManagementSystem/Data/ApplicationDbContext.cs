@@ -63,6 +63,15 @@ namespace SchoolManagementSystem.Data
                 .WithOne(b=>b.SubjectClassroomTeacher)
                 .HasForeignKey(i=>i.SubjectClassroomTeacherId);
 
+            builder
+                .Entity<Admin>()
+                .Property(x => x.IsDeleted)
+                .HasDefaultValue(false);
+
+            builder.Entity<Admin>()
+                .Property(i => i.Salary)
+                .HasColumnType("money");
+
 
             // Identity Tables
             builder.Entity<ApplicationUser>().ToTable("Users", schema: "Identity");
@@ -127,6 +136,12 @@ namespace SchoolManagementSystem.Data
             {
                 RoleId = AdminRoleId,
                 UserId = AdminId
+            });
+
+            builder.Entity<Admin>().HasData(new Admin
+            {
+                UserId = AdminId,
+                Salary = 50000m,
             });
 
 

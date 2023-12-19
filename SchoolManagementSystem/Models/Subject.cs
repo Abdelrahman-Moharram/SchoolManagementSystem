@@ -9,7 +9,7 @@ namespace SchoolManagementSystem.Models
         public bool IsDeleted { get; set; }
         public string? subjectCategoryId {get; set;}
         public virtual SubjectCategory? subjectCategory {get; set;}
-        public virtual List<Teacher>? Teacher { get; set;}
+        public virtual List<Teacher>? Teachers { get; set;}
         public virtual List<Classroom>? Classes { get; set;}
         public virtual List<SubjectClassroomTeacher>? subjectClassroomTeacher { get; set;}
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using SchoolManagementSystem.Data;
 namespace SchoolManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231219134836_AddAdminTable")]
+    partial class AddAdminTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,19 +87,19 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4617ed76-f9d5-4502-82fe-9f5879ea6037",
+                            Id = "c864f615-edf2-4585-923f-91ffcfa31499",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "743387b7-f9e5-47c6-a32a-9f29d16c9f01",
+                            Id = "3f23d836-ebc1-4a97-839e-82765172006c",
                             Name = "Teacher",
                             NormalizedName = "Teacher"
                         },
                         new
                         {
-                            Id = "4abc79a8-5d41-44e5-b0f2-7666c21ebc38",
+                            Id = "33227a45-4644-4575-afdf-959cb95e223a",
                             Name = "Student",
                             NormalizedName = "Student"
                         });
@@ -191,8 +194,8 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "6b0ebfa0-4a64-459a-84ce-41755808ae6d",
-                            RoleId = "4617ed76-f9d5-4502-82fe-9f5879ea6037"
+                            UserId = "72735797-34f8-4af3-9a73-fd2f1379c549",
+                            RoleId = "c864f615-edf2-4585-923f-91ffcfa31499"
                         });
                 });
 
@@ -240,10 +243,10 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3f82462a-e9b8-4efa-923c-7b236c5c7ab0",
+                            Id = "47a824ab-f7b6-49d8-8cd4-2d057ac910a0",
                             IsDeleted = false,
                             Salary = 50000m,
-                            UserId = "6b0ebfa0-4a64-459a-84ce-41755808ae6d"
+                            UserId = "72735797-34f8-4af3-9a73-fd2f1379c549"
                         });
                 });
 
@@ -326,9 +329,9 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6b0ebfa0-4a64-459a-84ce-41755808ae6d",
+                            Id = "72735797-34f8-4af3-9a73-fd2f1379c549",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6559ad61-7322-40af-99c4-043d59c18444",
+                            ConcurrencyStamp = "2dccd8b3-959c-4690-af6d-cf9ac366fac4",
                             Email = "admin@site.com",
                             EmailConfirmed = true,
                             Image = "img/users/user.webp",
@@ -336,7 +339,7 @@ namespace SchoolManagementSystem.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@site.com",
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB+J08x3bLtWl3X2SwWTgcL9pMOKvQm/2gem+K92afRSfZajJvePUoYdrGriLEy1PQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENLH1HUOvI+OtDAs8rcKpDDnnVLSEk6o7CdHADbO1z8nuk5oLGNZhsflZBoKdaOGUg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -415,13 +418,10 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ClassroomId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("DateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 12, 19, 22, 44, 52, 989, DateTimeKind.Local).AddTicks(3652));
+                        .HasDefaultValue(new DateTime(2023, 12, 19, 15, 48, 36, 371, DateTimeKind.Local).AddTicks(4606));
 
                     b.Property<bool?>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -434,21 +434,14 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<string>("SubjectClassroomTeacherId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("subjectId")
+                    b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassroomId");
-
                     b.HasIndex("SubjectClassroomTeacherId");
 
-                    b.HasIndex("TeacherId");
-
-                    b.HasIndex("subjectId");
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Lecture");
                 });
@@ -461,7 +454,7 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<DateTime>("DateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 12, 19, 22, 44, 52, 989, DateTimeKind.Local).AddTicks(4513));
+                        .HasDefaultValue(new DateTime(2023, 12, 19, 15, 48, 36, 371, DateTimeKind.Local).AddTicks(5411));
 
                     b.Property<string>("File")
                         .HasColumnType("nvarchar(max)");
@@ -695,12 +688,12 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<string>("SubjectsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("TeachersId")
+                    b.Property<string>("TeacherId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("SubjectsId", "TeachersId");
+                    b.HasKey("SubjectsId", "TeacherId");
 
-                    b.HasIndex("TeachersId");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("SubjectTeacher");
                 });
@@ -819,29 +812,15 @@ namespace SchoolManagementSystem.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Models.Lecture", b =>
                 {
-                    b.HasOne("SchoolManagementSystem.Models.Classroom", "Classroom")
-                        .WithMany()
-                        .HasForeignKey("ClassroomId");
-
                     b.HasOne("SchoolManagementSystem.Models.SubjectClassroomTeacher", "SubjectClassroomTeacher")
                         .WithMany("Lectures")
                         .HasForeignKey("SubjectClassroomTeacherId");
 
-                    b.HasOne("SchoolManagementSystem.Models.Teacher", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
-
-                    b.HasOne("SchoolManagementSystem.Models.Subject", "Subject")
+                    b.HasOne("SchoolManagementSystem.Models.Subject", null)
                         .WithMany("Lectures")
-                        .HasForeignKey("subjectId");
-
-                    b.Navigation("Classroom");
-
-                    b.Navigation("Subject");
+                        .HasForeignKey("SubjectId");
 
                     b.Navigation("SubjectClassroomTeacher");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Models.LecturePost", b =>
@@ -956,7 +935,7 @@ namespace SchoolManagementSystem.Migrations
 
                     b.HasOne("SchoolManagementSystem.Models.Teacher", null)
                         .WithMany()
-                        .HasForeignKey("TeachersId")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

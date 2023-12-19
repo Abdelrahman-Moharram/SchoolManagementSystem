@@ -7,8 +7,7 @@
         <form asp-action="AddLecture">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
-            <input name="SubjectId" value="@Model.SubjectClassroomTeacher?.SubjectId" hidden />
-            <input name="TeacherId" value="@Model.SubjectClassroomTeacher?.TeacherId" hidden />
+            <input asp-for="SubjectClassroomTeacherId" value="@Model.SubjectClassroomTeacherId" hidden />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" value="" class="form-control" />

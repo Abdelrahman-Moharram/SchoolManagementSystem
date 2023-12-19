@@ -15,27 +15,30 @@ namespace SchoolManagementSystem.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly IBaseRepository<Teacher> teacherRepo;
-        private readonly IBaseRepository<Student> studentRepo;
-        private readonly IBaseRepository<RegisterComplete> registerComplete;
+        private readonly UserManager<ApplicationUser>           userManager;
+        private readonly RoleManager<IdentityRole>              roleManager;
+        private readonly SignInManager<ApplicationUser>         signInManager;
+        private readonly IBaseRepository<Teacher>               teacherRepo;
+        private readonly IBaseRepository<Student>               studentRepo;
+        private readonly IBaseRepository<Admin>                 AdminRepo;
+        private readonly IBaseRepository<RegisterComplete>      registerComplete;
         public AccountController(
-            UserManager<ApplicationUser> _userManager, 
-            RoleManager<IdentityRole> _roleManager, 
-            SignInManager<ApplicationUser> _signInManager,
-            IBaseRepository<Teacher> _teacherRepo,
-            IBaseRepository<Student> _studentRepo,
-            IBaseRepository<RegisterComplete> _registerComplete
+            UserManager<ApplicationUser>                        _userManager, 
+            RoleManager<IdentityRole>                           _roleManager, 
+            SignInManager<ApplicationUser>                      _signInManager,
+            IBaseRepository<Teacher>                            _teacherRepo,
+            IBaseRepository<Student>                            _studentRepo,
+            IBaseRepository<RegisterComplete>                   _registerComplete,
+             IBaseRepository<Admin>                             _AdminRepo
         )
         {
-            userManager = _userManager;
-            roleManager = _roleManager;
-            signInManager = _signInManager;
-            teacherRepo = _teacherRepo;
-            studentRepo = _studentRepo;
-            registerComplete = _registerComplete;
+            userManager =                                       _userManager;
+            roleManager =                                       _roleManager;
+            signInManager =                                     _signInManager;
+            teacherRepo =                                       _teacherRepo;
+            studentRepo =                                       _studentRepo;
+            registerComplete =                                  _registerComplete;
+            AdminRepo =                                         _AdminRepo;
         }
 
 
@@ -101,7 +104,7 @@ namespace SchoolManagementSystem.Controllers
                     if (registerViewModel.Type.ToLower() == "teacher")
                     {
                         Teacher teacher = new Teacher{UserId = user.Id};
-                        var Claims = new[] { new Claim("Image", user.Image), new Claim("Role", "Teacher"), new Claim("typeId", teacher.Id) };
+                        var Claims = new[] { new Claim("Image", user.Image), new Claim("Role", "Teacher"), new Claim("TeacherId", teacher.Id) };
                         teacherRepo.Add(teacher);
                         await signInManager.SignInWithClaimsAsync(user, isPersistent:false, Claims);
                         await userManager.AddToRoleAsync(user, "Teacher");
@@ -110,7 +113,7 @@ namespace SchoolManagementSystem.Controllers
                     else 
                     {
                         Student student = new Student { UserId = user.Id };
-                        var Claims = new[] { new Claim("Image", user.Image), new Claim("Role", "Student"), new Claim("typeId", student.Id) };
+                        var Claims = new[] { new Claim("Image", user.Image), new Claim("Role", "Student"), new Claim("StudentId", student.Id) };
                         studentRepo.Add(student);
                         await signInManager.SignInWithClaimsAsync(user, isPersistent: false, Claims);
                         await userManager.AddToRoleAsync(user, "Student");
@@ -157,33 +160,73 @@ namespace SchoolManagementSystem.Controllers
                     var signresult = await signInManager.CheckPasswordSignInAsync(user, loginViewModel.Password, false);
                     if (signresult.Succeeded)
                     {
-                        List<Claim> claims = new List<Claim>{
-                            new Claim("Image",  user.Image != null ? user.Image:""),
-                            new Claim("Id",  user.Id != null ? user.Id:"")
-                        };
+
+                        
                     
-                        await signInManager.SignInWithClaimsAsync(user, loginViewModel.RemeberMe, claims);
                         var result = await userManager.GetRolesAsync(user);
+                        List<Claim> claims = new List<Claim>{
+                                new Claim("Image",  user.Image != null ? user.Image:""),
+                                new Claim("Id",  user.Id != null ? user.Id:""),
+                            };
 
                         if (result.Count == 0)
                         {
-                            if (teacherRepo.Find(i => i.UserId == user.Id) != null)
+                            var teacher     = await teacherRepo.Find(i => i.UserId == user.Id);
+                            var student     = await studentRepo.Find(i => i.UserId == user.Id);
+                            var Admin       = await AdminRepo.Find(i => i.UserId == user.Id);
+
+                            
+                            if (teacher != null)
                             {
                                 await userManager.AddToRoleAsync(user, "Teacher");
+                                claims.Add(new Claim("Role", "Teacher"));
+                                claims.Add(new Claim("TeacherId", teacher.Id));
+                                
+
                             }
-                            else if (studentRepo.Find(i => i.UserId == user.Id) != null)
+                            else if (student != null)
                             {
                                 await userManager.AddToRoleAsync(user, "Student");
+                                claims.Add(new Claim("Role", "Student"));
+                                claims.Add(new Claim("StudentId", student.Id));
+                            }
+                            else if (Admin != null)
+                            {
+                                await userManager.AddToRoleAsync(user, "Admin");
+                                claims.Add(new Claim("Role", "Admin"));
+                                claims.Add(new Claim("AdminId", Admin.Id));
                             }
                             else
                             {
                                 return RedirectToAction("AddToRole", "Account");
                             }
+
                         }
+                        else
+                        {
+                            var stringResult = String.Join(", ", result);
+                            claims.Add(new Claim("Role", stringResult));
+                            if (stringResult.Contains("Teacher"))
+                            {
+                                var teacher = await teacherRepo.Find(i => i.UserId == user.Id);
+                                claims.Add(new Claim("TeacherId", teacher.Id));
+                            }else if (stringResult.Contains("Student"))
+                            {
+                                var student = await studentRepo.Find(i => i.UserId == user.Id);
+                                claims.Add(new Claim("StudentId", student.Id));
+                            }
+                            else if (stringResult.Contains("Admin"))
+                            {
+                                var admin = await AdminRepo.Find(i => i.UserId == user.Id);
+                                claims.Add(new Claim("AdminId", admin.Id));
+                            }
+                        }
+                        await signInManager.SignInWithClaimsAsync(user, loginViewModel.RemeberMe, claims);
                         return RedirectToAction("Index", "Home");
                     }
                 }
             }
+            ModelState.AddModelError("","Invalid UserName or Email with Password");
             return View(loginViewModel);
         }
 

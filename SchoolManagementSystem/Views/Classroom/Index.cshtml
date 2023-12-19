@@ -1,0 +1,40 @@
+﻿@model List<Subject>
+@{
+    ViewData["Title"] = @ViewBag.Classroom;
+    Layout = "_AdminLayout";
+}
+
+
+    @if(Model != null)
+    {
+    <h1 class="text-center">@ViewBag.Classroom</h1>
+    <hr />
+    <div class="row my-5">
+
+        @foreach(var item in Model)
+        {
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <a asp-action="Subject" asp-route-SubjectName="@item.Name" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    @item.Name
+                                </a>
+                                <a class="h5 mb-0 font-weight-bold text-gray-800"></a>
+                            </div>
+                            @* <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+    }
+    else
+    {
+        <h1 class="text-center my-5">You have No Courses Available </h1>
+    }
