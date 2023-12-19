@@ -15,6 +15,8 @@ namespace SchoolManagementSystem.Configurations
             .HasDefaultValue(false);
 
 
+            
+
             builder
                 .HasMany(i => i.Classes)
                 .WithMany(i => i.Subjects)

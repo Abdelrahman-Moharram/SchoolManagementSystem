@@ -1,4 +1,5 @@
 
+using SchoolManagementSystem.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace SchoolManagementSystem.ViewModels
@@ -19,5 +20,7 @@ namespace SchoolManagementSystem.ViewModels
         public string? RoleName {get; set;}
         public decimal Salary { get; set;}
         public bool IsDone { get; set;}
+        public string? subjectCategoryId { get; set; }
+
     }
 }

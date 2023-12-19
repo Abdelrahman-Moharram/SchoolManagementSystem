@@ -18,7 +18,6 @@ namespace SchoolManagementSystem.Models
         public virtual List<Teacher>? Teachers {get; set;}
         public virtual List<Subject>? Subjects {get; set;}
         public virtual List<SubjectClassroomTeacher>? subjectClassroomTeacher { get; set;}
-
         public int capacity {get; set;}
 
         public bool IsDeleted { get; set; }

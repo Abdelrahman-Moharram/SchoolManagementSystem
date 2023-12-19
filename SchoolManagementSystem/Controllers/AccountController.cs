@@ -164,9 +164,21 @@ namespace SchoolManagementSystem.Controllers
                     
                         await signInManager.SignInWithClaimsAsync(user, loginViewModel.RemeberMe, claims);
                         var result = await userManager.GetRolesAsync(user);
+
                         if (result.Count == 0)
                         {
-                            return RedirectToAction("AddToRole", "Account");
+                            if (teacherRepo.Find(i => i.UserId == user.Id) != null)
+                            {
+                                await userManager.AddToRoleAsync(user, "Teacher");
+                            }
+                            else if (studentRepo.Find(i => i.UserId == user.Id) != null)
+                            {
+                                await userManager.AddToRoleAsync(user, "Student");
+                            }
+                            else
+                            {
+                                return RedirectToAction("AddToRole", "Account");
+                            }
                         }
                         return RedirectToAction("Index", "Home");
                     }
@@ -195,9 +207,13 @@ namespace SchoolManagementSystem.Controllers
                 if (roleType.ToLower() == "teacher")
                 {
                     Teacher teacher = new Teacher { UserId = userId.Value };
-                    teacherRepo.Add(teacher);
-                    teacherRepo.Save();
-                    await userManager.AddToRoleAsync(user, "Teacher");
+                    if (teacherRepo.Find(i => i.UserId == user.Id) == null)
+                    {
+                        teacherRepo.Add(teacher);
+                        teacherRepo.Save();
+                        await userManager.AddToRoleAsync(user, "Teacher");
+                    }
+
                     Claims.AddRange(new List<Claim> { new Claim("Role", "Teacher"), new Claim("typeId", teacher.Id) });
                     await userManager.AddClaimsAsync(user, Claims);
 
@@ -205,12 +221,14 @@ namespace SchoolManagementSystem.Controllers
                 else
                 {
                     Student student = new Student { Id = user.Id };
-                    studentRepo.Add(student);
-                    studentRepo.Save();
-                    await userManager.AddToRoleAsync(user, "Student");
+                    if (studentRepo.Find(i=>i.UserId == user.Id) == null)
+                    {
+                        studentRepo.Add(student);
+                        studentRepo.Save();
+                        await userManager.AddToRoleAsync(user, "Student");
+                    }
                     Claims.AddRange(new List<Claim> { new Claim("Role", "Student"), new Claim("typeId", student.Id) });
                     await userManager.AddClaimsAsync(user, Claims);
-                    return RedirectToAction("Index", "Home");
                 }
                 return RedirectToAction("Index", "Home");   
             }

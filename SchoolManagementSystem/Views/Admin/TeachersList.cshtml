@@ -1,0 +1,44 @@
+﻿@model List<Teacher>
+@{
+    ViewData["Title"] = "Teachers List";
+    Layout = "_AdminLayout";
+}
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Teachers DataTable</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Image</th>
+                        <th>PhoneNumber</th>
+                        <th>Salary</th>
+                        <th>Category</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    @foreach(var item  in Model)
+                    {
+                        <tr>
+                            <td>@item?.User?.UserName</td>
+                            <td>@item?.User?.Email</td>
+                            <td><img src="/@item?.User?.Image" width="40px" /></td>
+                            <td>@item?.User?.PhoneNumber</td>
+                            <td>@item?.Salary</td>
+                            <td>@item?.subjectCategory?.Name</td>
+                            <td><a asp-action="AddTeacherToSubjects" asp-route-Id="@item.Id">Details</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

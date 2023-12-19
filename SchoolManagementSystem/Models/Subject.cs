@@ -22,7 +22,7 @@ namespace SchoolManagementSystem.Models
         public virtual Level? level { get; set;}
 
         public virtual List<Student>? students { get; set;}
-
+        public virtual List<Lecture>? Lectures { get; set;}
 
         public virtual List<Exam>? Exams { get; set;}
 

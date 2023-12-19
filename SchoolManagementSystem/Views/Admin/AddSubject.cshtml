@@ -25,14 +25,14 @@
                 <span asp-validation-for="Grade" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="subjectCategoryId" class="control-label"></label>
+                <label asp-for="subjectCategoryId" class="control-label">Subject Category</label>
                 <select asp-for="subjectCategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.subjectCategory, "Id", "Name"))">
                     <option></option>
                 </select>
                 <span asp-validation-for="subjectCategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="levelId" class="control-label"></label>
+                <label asp-for="levelId" class="control-label">Level</label>
                 <select asp-for="levelId" class="form-control" asp-items="@(new SelectList(ViewBag.Levels, "Id", "Name"))">
                     <option></option>
                 </select>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using SchoolManagementSystem.Data;
 namespace SchoolManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217184745_AddLectureAndLecturePostTables")]
+    partial class AddLectureAndLecturePostTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,19 +87,19 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fc2b2ff4-1f85-4d6e-a3f4-945c0532cab5",
+                            Id = "433f3f6c-b0ca-4e69-b5f8-ffb50e55c559",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "54e2d01d-5869-4176-99b9-c687dc8c89f8",
+                            Id = "6a2c30cd-6015-47c4-a7d7-20f09b2daf2b",
                             Name = "Teacher",
                             NormalizedName = "Teacher"
                         },
                         new
                         {
-                            Id = "8d3c7232-8542-4a94-add8-3983c9017fbf",
+                            Id = "b39d0e95-714e-49e3-8d14-c5091d04b56c",
                             Name = "Student",
                             NormalizedName = "Student"
                         });
@@ -191,8 +194,8 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "82899d50-2c8d-4d8a-bcb2-535e0119fc64",
-                            RoleId = "fc2b2ff4-1f85-4d6e-a3f4-945c0532cab5"
+                            UserId = "66e3c906-075d-49f6-8327-6fe8b42ee3b8",
+                            RoleId = "433f3f6c-b0ca-4e69-b5f8-ffb50e55c559"
                         });
                 });
 
@@ -294,9 +297,9 @@ namespace SchoolManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "82899d50-2c8d-4d8a-bcb2-535e0119fc64",
+                            Id = "66e3c906-075d-49f6-8327-6fe8b42ee3b8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0b38d2eb-9258-41f1-a084-d66aa85014b2",
+                            ConcurrencyStamp = "2266f221-237d-4439-9f3f-4f2b58411a01",
                             Email = "admin@site.com",
                             EmailConfirmed = true,
                             Image = "img/users/user.webp",
@@ -304,7 +307,7 @@ namespace SchoolManagementSystem.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@site.com",
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFvdJ4JLw0Fdn6M3O9uBWthnOBY6OMswQ2iQk/WiFPDFAgR5ZxF2Fj3qhDK916SBfw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELXuQAWclAcvF1EkZ8Je168VLyAV18HWmKCpIwrkh3XftVaAS2uPpo3zfDZj+6YIrA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -386,7 +389,7 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<DateTime>("DateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 12, 19, 12, 3, 23, 8, DateTimeKind.Local).AddTicks(3915));
+                        .HasDefaultValue(new DateTime(2023, 12, 17, 20, 47, 44, 854, DateTimeKind.Local).AddTicks(2984));
 
                     b.Property<bool?>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -396,17 +399,17 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubjectClassroomTeacherId")
+                    b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SubjectId")
+                    b.Property<string>("TeacherId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectClassroomTeacherId");
-
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Lecture");
                 });
@@ -415,11 +418,6 @@ namespace SchoolManagementSystem.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 12, 19, 12, 3, 23, 8, DateTimeKind.Local).AddTicks(4708));
 
                     b.Property<string>("File")
                         .HasColumnType("nvarchar(max)");
@@ -435,14 +433,9 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LectureId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("LecturePost");
                 });
@@ -597,23 +590,18 @@ namespace SchoolManagementSystem.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Models.SubjectClassroomTeacher", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ClassroomId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SubjectId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("TeacherId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("SubjectId", "ClassroomId", "TeacherId");
 
                     b.HasIndex("ClassroomId");
-
-                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
 
@@ -768,15 +756,17 @@ namespace SchoolManagementSystem.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Models.Lecture", b =>
                 {
-                    b.HasOne("SchoolManagementSystem.Models.SubjectClassroomTeacher", "SubjectClassroomTeacher")
-                        .WithMany("Lectures")
-                        .HasForeignKey("SubjectClassroomTeacherId");
-
-                    b.HasOne("SchoolManagementSystem.Models.Subject", null)
+                    b.HasOne("SchoolManagementSystem.Models.Subject", "Subject")
                         .WithMany("Lectures")
                         .HasForeignKey("SubjectId");
 
-                    b.Navigation("SubjectClassroomTeacher");
+                    b.HasOne("SchoolManagementSystem.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Models.LecturePost", b =>
@@ -785,13 +775,7 @@ namespace SchoolManagementSystem.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("LectureId");
 
-                    b.HasOne("SchoolManagementSystem.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Lecture");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Models.Student", b =>
@@ -849,15 +833,21 @@ namespace SchoolManagementSystem.Migrations
                 {
                     b.HasOne("SchoolManagementSystem.Models.Classroom", "classroom")
                         .WithMany("subjectClassroomTeacher")
-                        .HasForeignKey("ClassroomId");
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Models.Subject", "subject")
                         .WithMany("subjectClassroomTeacher")
-                        .HasForeignKey("SubjectId");
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Models.Teacher", "Teacher")
                         .WithMany("subjectClassroomTeacher")
-                        .HasForeignKey("TeacherId");
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Teacher");
 
@@ -924,11 +914,6 @@ namespace SchoolManagementSystem.Migrations
                     b.Navigation("Lectures");
 
                     b.Navigation("subjectClassroomTeacher");
-                });
-
-            modelBuilder.Entity("SchoolManagementSystem.Models.SubjectClassroomTeacher", b =>
-                {
-                    b.Navigation("Lectures");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Models.Teacher", b =>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.DependencyResolver;
 using SchoolManagementSystem.Configurations;
 using SchoolManagementSystem.Models;
 using SchoolManagementSystem.Repository;
@@ -21,29 +22,33 @@ namespace SchoolManagementSystem.Controllers
         private readonly IBaseRepository<Level>                     LevelRepository;
         private readonly IBaseRepository<Subject>                   subjectRepository;
         private readonly IBaseRepository<SubjectCategory>           subjectCategoryRepository;
+        private readonly IBaseRepository<SubjectClassroomTeacher>   subjectClassroomTeacherRepository;
+        
 
 
         public AdminController(
-            UserManager<ApplicationUser>            _userManager,
-            RoleManager<IdentityRole>               _roleManager,
-            IBaseRepository<RegisterComplete>       _registerRepository,
-            IBaseRepository<Teacher>                _teacherRepository,
-            IBaseRepository<Student>                _studentRepository,
-            IBaseRepository<Classroom>              _classRoomRepository,
-            IBaseRepository<Level>                  _LevelRepository,
-            IBaseRepository<Subject>                _subjectRepository,
-            IBaseRepository<SubjectCategory>        _subjectCategoryRepository
+            UserManager<ApplicationUser>                _userManager,
+            RoleManager<IdentityRole>                   _roleManager,
+            IBaseRepository<RegisterComplete>           _registerRepository,
+            IBaseRepository<Teacher>                    _teacherRepository,
+            IBaseRepository<Student>                    _studentRepository,
+            IBaseRepository<Classroom>                  _classRoomRepository,
+            IBaseRepository<Level>                      _LevelRepository,
+            IBaseRepository<Subject>                    _subjectRepository,
+            IBaseRepository<SubjectCategory>            _subjectCategoryRepository,
+            IBaseRepository<SubjectClassroomTeacher>    _subjectClassroomTeacherRepository
             )
         {
-            registerRepository                      = _registerRepository;
-            userManager                             = _userManager;
-            roleManager                             = _roleManager;
-            teacherRepository                       = _teacherRepository;
-            studentRepository                       = _studentRepository;
-            classRoomRepository                     = _classRoomRepository;
-            LevelRepository                         = _LevelRepository;
-            subjectRepository                       = _subjectRepository;
-            subjectCategoryRepository               = _subjectCategoryRepository;
+            registerRepository                          = _registerRepository;
+            userManager                                 = _userManager;
+            roleManager                                 = _roleManager;
+            teacherRepository                           = _teacherRepository;
+            studentRepository                           = _studentRepository;
+            classRoomRepository                         = _classRoomRepository;
+            LevelRepository                             = _LevelRepository;
+            subjectRepository                           = _subjectRepository;
+            subjectCategoryRepository                   = _subjectCategoryRepository;
+            subjectClassroomTeacherRepository           = _subjectClassroomTeacherRepository;
         }
 
 
@@ -67,6 +72,10 @@ namespace SchoolManagementSystem.Controllers
             foreach (var r in await registerRepository.FindAll(i=>i.IsDone == (done!=null)))
             {
                 var user = await userManager.FindByIdAsync(r.UserId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
                 NotCompletelyRegisteredUser notCompletele = new NotCompletelyRegisteredUser
                 {
                     Id = user.Id,
@@ -93,9 +102,11 @@ namespace SchoolManagementSystem.Controllers
             {
                 return NotFound(user);
             }
-            ViewBag.Roles = roleManager.Roles.Where(i => !i.Name.Contains("Admin")).ToList(); ;
+            ViewBag.Roles = roleManager.Roles.Where(i => !i.Name.Contains("Admin")).ToList();
+            var roles = String.Join(", ", await userManager.GetRolesAsync(user));
+
             var regData = await registerRepository.Find(i=>i.UserId == user.Id);
-            if (await userManager.IsInRoleAsync(user, "Teacher")) 
+            if (await teacherRepository.Find(i => i.UserId == user.Id) != null) 
             {
                 var teacher = await teacherRepository.Find(i=>i.UserId == user.Id);
                 TeacherViewModel teacherViewModel = new TeacherViewModel
@@ -108,12 +119,15 @@ namespace SchoolManagementSystem.Controllers
                     IsDone = regData.IsDone,
                     PhoneNumber = user.PhoneNumber,
                     Salary = teacher.Salary,
-                    RoleName = String.Join(", ", await userManager.GetRolesAsync(user))
+                    subjectCategoryId = teacher.subjectCategoryId,
+                    RoleName = roles == string.Empty ? "Teacher" : roles
 
-                };
+            };
+                ViewBag.subjectCategories = subjectCategoryRepository.GetAll();
+
                 return View("AddTeacher", teacherViewModel);
             }
-            else if (await userManager.IsInRoleAsync(user, "Student"))
+            else if (await studentRepository.Find(i => i.UserId == user.Id) != null)
             {
                 var student = await studentRepository.Find(i => i.UserId == user.Id);
                 var studentViewModel = new StudentUserViewModel
@@ -127,7 +141,7 @@ namespace SchoolManagementSystem.Controllers
                     PhoneNumber = user.PhoneNumber,
                     ClassroomId = student.ClassroomId,
                     LevelId = student.LevelId,
-                    RoleName = String.Join(", ", await userManager.GetRolesAsync(user))
+                    RoleName = roles == string.Empty ? "Student" : roles
                 };
 
                 ViewBag.Levels = await LevelRepository.GetAllAsync();
@@ -195,6 +209,7 @@ namespace SchoolManagementSystem.Controllers
                 }
                 // update Teacher data
                 teacher.Salary = teachertViewModel.Salary;
+                teacher.subjectCategoryId = teachertViewModel.subjectCategoryId;
 
                 // update user data
                 user.Email = teachertViewModel.Email;
@@ -252,6 +267,12 @@ namespace SchoolManagementSystem.Controllers
                 var classes = await classRoomRepository.FindAll(i=>i.levelId == subject.levelId);
                 foreach (var item in classes)
                 {
+
+                    subjectClassroomTeacherRepository.Add(new SubjectClassroomTeacher
+                    {
+                        ClassroomId = item.Id,
+                        SubjectId = subject.Id,
+                    });
                     await Task.Run(() => item.Subjects.Add(subject));
                 }
                 var Students = await studentRepository.FindAll(i=>i.LevelId == subject.levelId);
@@ -319,18 +340,55 @@ namespace SchoolManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                classroom.Subjects = classroom.level.subjects;
+                classroom.Subjects = classroom?.level?.subjects;
                 await Task.Run(() => classRoomRepository.Add(classroom));
                 classRoomRepository.Save();
                 return RedirectToAction("AddClassRoom");
             }
             return View(classroom);
         }
+        public IActionResult TeachersList()
+        {
+            var teacher = teacherRepository.GetAll();
+            return View(teacher);
+        }
+        public async Task<IActionResult> AddTeacherToSubjects(string Id)
+        {
+            var teacher = await teacherRepository.GetById(Id);
+            TeacherSubjectsViewModel teacherSubjectsViewModel = new TeacherSubjectsViewModel();
+            teacherSubjectsViewModel.Teacher = teacher;
+            teacherSubjectsViewModel.SubjectCategory = teacher.subjectCategory;
+            teacherSubjectsViewModel.SubjectCategoryId = teacher.subjectCategoryId;
+            teacherSubjectsViewModel.TeacherId = Id;
+            ViewBag.ClassroomSubjects = await subjectClassroomTeacherRepository.FindAll(i=>i.subject.subjectCategoryId == teacher.subjectCategoryId);
+            return View(teacherSubjectsViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeacherToSubjects(string Id, TeacherSubjectsViewModel teacherSubjectsViewModel)
+        {
+            var subjectClassroomTeacher = HttpContext.Request.Form.Where(i=>i.Key == "Subjects").ToList()[0].Value;
+            var subsclassteacher = await subjectClassroomTeacherRepository.FindAll(i=>i.TeacherId == Id);
+            foreach (var item in subsclassteacher)
+            {
+                item.TeacherId = null;
+                item.Teacher = null;
+            }
+            foreach (var subject in subjectClassroomTeacher)
+            {
+                if (subject != null)
+                {
+                    var subteacher = await subjectClassroomTeacherRepository.GetById(subject);
+                    subteacher.TeacherId = Id;
+                }
+            }
+            subjectClassroomTeacherRepository.Save();
+            return RedirectToAction(nameof(AddTeacherToSubjects));
+        }
 
 
 
         [Route("/Admin/Classrooms/{levelId}")]
-        [AllowAnonymous]
         public async Task<IActionResult> getClassrooms(string levelId)
         {
             List<Classroom> classrooms = await classRoomRepository.FindAll(i=>i.levelId == levelId);

@@ -32,7 +32,37 @@ namespace SchoolManagementSystem.Data
             
 
 
-            builder.Entity<SubjectClassroomTeacher>().HasKey(x=>new {x.SubjectId, x.ClassroomId, x.TeacherId});
+            builder
+                .Entity<SubjectClassroomTeacher>()
+                .HasKey(x=>x.Id);
+            builder
+                .Entity<Lecture>()
+                .Property(x=>x.DateTime)
+                .HasDefaultValue(DateTime.Now);
+            builder
+                .Entity<Lecture>()
+                .Property(x => x.IsDeleted)
+                .HasDefaultValue(false);
+            builder
+                .Entity<LecturePost>()
+                .Property(x => x.IsDeleted)
+                .HasDefaultValue(false);
+            builder
+                .Entity<LecturePost>()
+                .Property(x => x.DateTime)
+                .HasDefaultValue(DateTime.Now);
+
+            builder
+                .Entity<LecturePost>()
+                .HasOne(i=>i.User)
+                .WithMany()
+                .HasForeignKey(i=>i.UserId);
+
+            builder.Entity<SubjectClassroomTeacher>()
+                .HasMany(i=>i.Lectures)
+                .WithOne(b=>b.SubjectClassroomTeacher)
+                .HasForeignKey(i=>i.SubjectClassroomTeacherId);
+
 
             // Identity Tables
             builder.Entity<ApplicationUser>().ToTable("Users", schema: "Identity");
@@ -108,6 +138,7 @@ namespace SchoolManagementSystem.Data
         public DbSet<SchoolManagementSystem.Models.Level> Level { get; set; } = default!;
         public DbSet<SchoolManagementSystem.Models.Subject> Subject { get; set; } = default!;
         public DbSet<SchoolManagementSystem.Models.Classroom> Classroom { get; set; } = default!;
+        public DbSet<SchoolManagementSystem.Models.Lecture> Lecture { get; set; } = default!;
 
 
     }

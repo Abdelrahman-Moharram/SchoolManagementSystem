@@ -120,24 +120,7 @@
 </div>
 <script>
 
-    async function  setClass(){
-
-        const levelId = document.getElementById("LevelId").value
-        console.log("123", levelId)
-        fetch("/Admin/Classrooms/" + levelId).then(response => {
-            return response.json()
-        }).then(data => {
-            const selectInput = document.getElementById("ClassroomId");
-            selectInput.innerHTML = `<option></option>`;
-            for (var item of data) {
-                console.log(selectInput);
-                selectInput.innerHTML += `
-                            <option value = "${item['id']}">${item['name']}</option>
-                    `;
-            }
-        }).catch(err=>console.log("err=> ",err))
-        
-    }
+  
     const imgInp = document.getElementById("ImageField");
     const ImgElement = document.getElementById("ImgElement");
     imgInp.onchange = evt => {
