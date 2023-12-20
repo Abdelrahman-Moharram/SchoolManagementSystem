@@ -1,6 +1,14 @@
 @model ApplicationUser
 @{
     ViewData["Title"] = "Profile";
+    Layout = "_AdminLayout";
+
 }
 
 <h1>@Model.UserName</h1>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

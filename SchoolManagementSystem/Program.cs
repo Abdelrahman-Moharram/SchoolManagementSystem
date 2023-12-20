@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SchoolManagementSystem.Configurations;
 using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Models;
 using SchoolManagementSystem.Repository;
@@ -17,6 +18,7 @@ namespace SchoolManagementSystem
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             ); 
             builder.Services.AddSession();
+            builder.Services.ConfigureOptions<ConfigureSecurityStampOptions>(); // prevent claims lost refresing 
 
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));   
             //-- Add Identity 

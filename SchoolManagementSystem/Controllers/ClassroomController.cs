@@ -48,6 +48,17 @@ namespace SchoolManagementSystem.Controllers
             userManager                                     = _userManager;
         }
 
+        public async Task<List<Subject>> SubjectsAsync(string StudentId)
+        {
+            if (StudentId != null)
+            {
+                var student = await studentRepository.GetById(StudentId);
+                return student?.Subjects?.ToList();
+            }
+            return null;
+        }
+
+
         // list Subjects in Classroom
         [Route("/Classroom")]
 
@@ -57,8 +68,10 @@ namespace SchoolManagementSystem.Controllers
             if (StudentId != null )
             {
                 var student = await studentRepository.GetById(StudentId);
+                var Subjects = student?.Classroom?.Subjects?.ToList();
                 ViewBag.Classroom = student.Classroom?.Name;
-                return View(student?.Classroom?.Subjects?.ToList());
+                ViewBag.Subjects = Subjects;
+                return View(Subjects);
             }
             return BadRequest();
         }
@@ -76,6 +89,7 @@ namespace SchoolManagementSystem.Controllers
                 if (subject != null)
                 {
                     ViewBag.SubjectName = SubjectName;
+                    ViewBag.Subjects = await SubjectsAsync(StudentId);
                     return View(subject.Lectures?.ToList());
                 }
             }
@@ -103,7 +117,9 @@ namespace SchoolManagementSystem.Controllers
                         var posts = await LecturePostRepository.FindAll(i => i.LectureId == Lecture.Id);
                         ViewBag.Lecture = LecName;
                         ViewBag.SubjectName = SubjectName;
-                        return View(posts);
+                        ViewBag.Subjects = await SubjectsAsync(StudentId);
+
+                        return View(posts.OrderBy(i=>i.DateTime).ToList());
                     }
 
                 }
@@ -130,6 +146,7 @@ namespace SchoolManagementSystem.Controllers
                 Text = Text,
                 LectureId = lecture.Id,
                 UserId = userId,
+                DateTime = DateTime.Now
             };
             LecturePostRepository.Add(post);
             LecturePostRepository.Save();

@@ -1,4 +1,4 @@
-﻿@model List<SubjectClassroomTeacher>
+﻿@model List<Classroom>
 @{
     ViewData["Title"] = "Classrooms";
     Layout = "_AdminLayout";
@@ -19,8 +19,8 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <a asp-action="Subjects" asp-route-ClassroomName="@item.classroom?.Name" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    @item.classroom?.Name
+                                <a asp-action="Subjects" asp-route-ClassroomName="@item.Name" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    @item.Name
                                 </a>
                                 <a class="h5 mb-0 font-weight-bold text-gray-800"></a>
                             </div>
@@ -38,4 +38,9 @@
 else
 {
     <h1 class="text-center my-5">You have No Classrooms Available </h1>
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

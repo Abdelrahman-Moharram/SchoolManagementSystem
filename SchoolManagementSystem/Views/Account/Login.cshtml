@@ -1,5 +1,8 @@
 ﻿@model SchoolManagementSystem.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
 
+}
 
 <div class="container-fluid py-5">
     <div class="container">
@@ -26,10 +29,10 @@
                             </div>
                             <div class="mt-4 mb-4 mx-auto">
                                 <div class="form-check">
-                                <label asp-for="RemeberMe" class="control-label">Remeber Me</label>
-                                <input asp-for="RemeberMe" type="checkbox"  class="form-check-input" />
-                                <span asp-validation-for="RemeberMe" class="text-danger"></span>
-                            </div>
+                                    <input asp-for="RemeberMe" type="checkbox"  class="form-check-input" />
+                                    <label asp-for="RemeberMe" class="control-label">Remeber Me</label>
+                                    <span asp-validation-for="RemeberMe" class="text-danger"></span>
+                                </div>
                             </div>
                             <div class="col-12 mb-4 mx-auto">
                                 <div class="form-floating">
@@ -49,5 +52,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

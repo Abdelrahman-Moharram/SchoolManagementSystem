@@ -68,3 +68,8 @@
         }else{
             <h1 class="text-center mt-5">No New Registers</h1>
         }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

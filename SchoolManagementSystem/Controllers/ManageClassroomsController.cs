@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Configurations;
 using SchoolManagementSystem.Models;
 using SchoolManagementSystem.Repository;
+using System.Collections.Generic;
 
 namespace SchoolManagementSystem.Controllers
 {
@@ -37,17 +38,37 @@ namespace SchoolManagementSystem.Controllers
             teacherRepository = _teacherRepository;            
             classRoomRepository                         = _classRoomRepository;
         }
-        [Route("/ManageClassrooms")]
 
+        public async Task<List<Classroom>> classroomsAsync(string TeacherId)
+        {
+            if (TeacherId == null)
+            {
+                return null;
+            }
+            var subclassteacher = await SubjectClassroomTeacherRepository.FindAll(i => i.TeacherId == TeacherId);
+            var list = subclassteacher.ToList();
+            List<Classroom> classes = new List<Classroom>();
+            foreach (var item in list)
+            {
+                classes.Add(item.classroom);
+            }
+            return classes.ToList();
+        }
+
+        
+
+
+
+        [Route("/ManageClassrooms")]
         public async Task<IActionResult> Index()
         {
             var TeacherId = User.Claims.FirstOrDefault(i => i.Type == "TeacherId")?.Value;
             
             if (TeacherId != null)
             {
-
-                var subclassteacher = await SubjectClassroomTeacherRepository.FindAll(i => i.TeacherId == TeacherId);
-                return View(subclassteacher.ToList());
+                var Classrooms      = await classroomsAsync(TeacherId);
+                ViewBag.Classrooms  = Classrooms;
+                return View(Classrooms);
             }
             return BadRequest();
         }
@@ -58,6 +79,7 @@ namespace SchoolManagementSystem.Controllers
             var TeacherId = User.Claims.FirstOrDefault(i => i.Type == "TeacherId")?.Value;
             if (TeacherId != null)
             {
+
                 var subclassteacher = await SubjectClassroomTeacherRepository.FindAll(i => i.TeacherId == TeacherId && i.classroom.Name == ClassroomName);
                 List<Subject> Subjects = new List<Subject>();
                 foreach (var item in subclassteacher.ToList())
@@ -65,10 +87,10 @@ namespace SchoolManagementSystem.Controllers
                     if (item.subject != null)
                         Subjects.Add(item.subject);
                 }
+                ViewBag.Classrooms  = await classroomsAsync(TeacherId);
                 ViewBag.ClassroomName = ClassroomName;
-                return View(Subjects.ToList());
-                    
                 
+                return View(Subjects.ToList());
 
             }
             return BadRequest();
@@ -82,20 +104,19 @@ namespace SchoolManagementSystem.Controllers
             {
                 
                 var subClassteacher = await SubjectClassroomTeacherRepository
-                    .Find(
-                        i =>
-                        i.classroom.Name == ClassroomName &&
-                        i.subject.Name == SubjectName &&
-                        i.TeacherId == TeacherId
-                        );
+                .Find(
+                    i =>
+                    i.classroom.Name == ClassroomName &&
+                    i.subject.Name == SubjectName &&
+                    i.TeacherId == TeacherId
+                    );
                 
-                    var Lecs = await LectureRepository.FindAll(i => i.SubjectClassroomTeacherId == subClassteacher.Id);
-                    var lecsList = Lecs?.ToList();
+                var Lecs = await LectureRepository.FindAll(i => i.SubjectClassroomTeacherId == subClassteacher.Id);
                 
-                    ViewBag.ClassroomName = ClassroomName;
-                    ViewBag.SubjectName = SubjectName;
-
-                return View(lecsList);
+                ViewBag.ClassroomName = ClassroomName;
+                ViewBag.SubjectName = SubjectName;
+                ViewBag.Classrooms = await classroomsAsync(TeacherId);
+                return View(Lecs?.ToList());
 
             }
             return BadRequest();
@@ -174,7 +195,8 @@ namespace SchoolManagementSystem.Controllers
                         ViewBag.LecName = LecName;
                         ViewBag.ClassroomName = ClassroomName;
                         ViewBag.SubjectName = SubjectName;
-                        return View(posts);
+                        ViewBag.Classrooms = await classroomsAsync(TeacherId);
+                        return View(posts.OrderByDescending(i=>i.DateTime).ToList());
                     }
                 }
             }

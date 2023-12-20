@@ -15,6 +15,23 @@ namespace SchoolManagementSystem.Controllers
 
         public IActionResult Index()
         {
+            if (User.Claims.FirstOrDefault(i => i.Type == "AdminId")?.Value != null)
+            {
+                return RedirectToAction(nameof(Index), nameof(Admin));
+            }
+            else if (User.Claims.FirstOrDefault(i => i.Type == "TeacherId")?.Value != null)
+            {
+                return RedirectToAction(nameof(Index), "ManageClassrooms");
+
+            }
+            else if (User.Claims.FirstOrDefault(i => i.Type == "StudentId")?.Value != null)
+            {
+                return RedirectToAction(nameof(Index), "Classroom");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 

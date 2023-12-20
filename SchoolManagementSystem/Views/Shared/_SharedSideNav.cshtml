@@ -1,134 +1,274 @@
 ﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-    </a>
+    
 
     <!-- Divider -->
-    <hr class="sidebar-divider my-0">
+    
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    @* <li class="nav-item active">
         <a class="nav-link" asp-action="Index" asp-controller="Admin">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
-    </li>
+    </li> *@
 
     <!-- Divider -->
-    <hr class="sidebar-divider">
-
+    
+  
     <!-- Heading -->
-    <div class="sidebar-heading">
-        Interface
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Registers"
-           aria-expanded="true" aria-controls="Registers">
-            <i class="fas fa-user-plus"></i>
+    
+    @if (User.Claims.FirstOrDefault(i=>i.Type == "AdminId")?.Value != null)
+    {
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-action="Index" asp-controller="Admin">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">School</div>
+        </a>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item active">
+            <a class="nav-link" asp-action="Index" asp-controller="Admin">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <div class="sidebar-heading">
+            Interface
+        </div>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Registers"
+               aria-expanded="true" aria-controls="Registers">
+                <i class="fas fa-user-plus"></i>
             <span>New Registers</span>
-        </a>
-        <div id="Registers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">New Registers:</h6>
-                <a class="collapse-item" asp-action="NewRegisters">Need Action</a>
-                <a class="collapse-item" href="/Admin/New-Registers/Done">Completed</a>
+            </a>
+            <div id="Registers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">New Registers:</h6>
+                    <a class="collapse-item" asp-action="NewRegisters">Need Action</a>
+                    <a class="collapse-item" href="/Admin/New-Registers/Done">Completed</a>
+                </div>
             </div>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Subjects"
-           aria-expanded="true" aria-controls="Subjects">
-            <i class="fas fa-user-plus"></i>
-            <span>Subjects</span>
-        </a>
-        <div id="Subjects" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Subjects:</h6>
-                <a class="collapse-item" asp-action="AllSubjects">All Subjects</a>
-                <a class="collapse-item" asp-action="AddSubject">Add New </a>
-                @* <a class="collapse-item" asp-action="SubjectsCategoryList">->Subjects Category List</a> *@
-                <a class="collapse-item" asp-action="AddSubjectCategory">Add Subjects Category</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Subjects"
+               aria-expanded="true" aria-controls="Subjects">
+                <i class="fas fa-user-plus"></i>
+                <span>Subjects</span>
+            </a>
+            <div id="Subjects" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Subjects:</h6>
+                    <a class="collapse-item" asp-action="AllSubjects">All Subjects</a>
+                    <a class="collapse-item" asp-action="AddSubject">Add New </a>
+                    @* <a class="collapse-item" asp-action="SubjectsCategoryList">->Subjects Category List</a> *@
+                    <a class="collapse-item" asp-action="AddSubjectCategory">Add Subjects Category</a>
 
+                </div>
             </div>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Levels"
-           aria-expanded="true" aria-controls="Levels">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Levels</span>
-        </a>
-        <div id="Levels" class="collapse" aria-labelledby="headingUtilities"
-             data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Levels:</h6>
-                <a class="collapse-item" asp-action="AllLevels">Levels List</a>
-                <a class="collapse-item" asp-action="AddLevel">Add Level </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Levels"
+               aria-expanded="true" aria-controls="Levels">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Levels</span>
+            </a>
+            <div id="Levels" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Levels:</h6>
+                    <a class="collapse-item" asp-action="AllLevels">Levels List</a>
+                    <a class="collapse-item" asp-action="AddLevel">Add Level </a>
+                </div>
             </div>
-        </div>
-    </li>
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ClassRooms"
-           aria-expanded="true" aria-controls="ClassRooms">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>ClassRooms</span>
-        </a>
-        <div id="ClassRooms" class="collapse" aria-labelledby="headingUtilities"
-             data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">ClassRooms:</h6>
-                <a class="collapse-item" asp-action="AllClassRooms">ClassRooms List</a>
-                <a class="collapse-item" asp-action="AddClassRoom">Add ClassRoom </a>
-            </div>
+        </li>
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ClassRooms"
+               aria-expanded="true" aria-controls="ClassRooms">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>ClassRooms</span>
+            </a>
+            <div id="ClassRooms" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">ClassRooms:</h6>
+                    <a class="collapse-item" asp-action="AllClassRooms">ClassRooms List</a>
+                    <a class="collapse-item" asp-action="AddClassRoom">Add ClassRoom </a>
+                </div>
             
 
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Teachers"
-           aria-expanded="true" aria-controls="Teachers">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Teachers</span>
-        </a>
-        <div id="Teachers" class="collapse" aria-labelledby="headingUtilities"
-             data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Teachers:</h6>
-                <a class="collapse-item" asp-action="TeachersList">Teachers List</a>
             </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Teachers"
+               aria-expanded="true" aria-controls="Teachers">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Teachers</span>
+            </a>
+            <div id="Teachers" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Teachers:</h6>
+                    <a class="collapse-item" asp-action="TeachersList">Teachers List</a>
+                </div>
 
 
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MainProcess"
-           aria-expanded="true" aria-controls="MainProcess">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Main Process</span>
-        </a>
-        <div id="MainProcess" class="collapse" aria-labelledby="headingUtilities"
-             data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Main Process:</h6>
-                <a class="collapse-item" asp-action="AllLevels">Levels List</a>
-                <a class="collapse-item" asp-action="AddLevel">Add Level </a>
             </div>
+        </li>
+        <hr class="sidebar-divider d-none d-md-block">
 
-
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-    </li>
+
+        @* <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MainProcess"
+               aria-expanded="true" aria-controls="MainProcess">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Main Process</span>
+            </a>
+            <div id="MainProcess" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Main Process:</h6>
+                    <a class="collapse-item" asp-action="AllLevels">Levels List</a>
+                    <a class="collapse-item" asp-action="AddLevel">Add Level </a>
+                </div>
+
+
+            </div>
+        </li> *@
+    }
+    else if (User.Claims.FirstOrDefault(i => i.Type == "TeacherId")?.Value != null)
+    {
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-action="Index" asp-controller="ManageClassrooms">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">School</div>
+        </a>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item active">
+            <a class="nav-link" asp-controller="ManageClassrooms" asp-action="Index">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <div class="sidebar-heading">
+            Interface
+        </div>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-toggle="collapse" data-target="#ClassroomsList"
+               aria-expanded="true" aria-controls="ClassroomsList">
+                <i class="fas fa-home"></i>
+                <span>Classrooms</span>
+            </a>
+            <div id="ClassroomsList" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Classrooms:</h6>
+                    @if (ViewBag.Classrooms != null)
+                    {
+                        @foreach (var item in ViewBag.Classrooms)
+                        {
+                            <a class="collapse-item"
+                               href="/ManageClassrooms/@item.Name">
+                                @item.Name
+                             </a>
+
+                        }
+                    }
+                </div>
+            </div>
+        </li>
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+
+
+    }else if (User.Claims.FirstOrDefault(i => i.Type == "StudentId")?.Value != null)
+    {
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-action="Index" asp-controller="Classroom">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">School</div>
+        </a>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item active">
+            <a class="nav-link" asp-controller="Classroom" asp-action="Index">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <div class="sidebar-heading">
+            Interface
+        </div>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-toggle="collapse" data-target="#Subjects"
+               aria-expanded="true" aria-controls="Subjects">
+                <i class="fas fa-home"></i>
+                <span>Subjects</span>
+            </a>
+            <div id="Subjects" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Subjects:</h6>
+                    @if (ViewBag.Subjects != null)
+                    {
+                        @foreach (var item in ViewBag.Subjects)
+                        {
+                            <a class="collapse-item" style="font-size:10px"
+                                href="/Classroom/@item.Name">
+                                @item.Name
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </li>
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    }
+    else
+    {
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-action="Index" asp-controller="Home">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">School</div>
+        </a>
+
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-action="Register" asp-controller="Account">
+            <div class="sidebar-brand-icon rotate-n-15">
+            </div>
+            <div class="sidebar-brand-text mx-3">Register</div>
+        </a>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-action="Login" asp-controller="Account">
+            <div class="sidebar-brand-icon rotate-n-15">
+            </div>
+            <div class="sidebar-brand-text mx-3">Login</div>
+        </a>
+        
+        
+    }
+    <!-- Nav Item - Pages Collapse Menu -->
     <!-- Divider -->
-    <hr class="sidebar-divider">
-
+    @*
     <!-- Heading -->
+    <hr class="sidebar-divider">
     <div class="sidebar-heading">
         Addons
     </div>
@@ -168,15 +308,45 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span>
         </a>
-    </li>
+    </li> *@
 
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
+    
 
 </ul>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // make it as accordion for smaller screens
+        if (window.innerWidth < 992) {
+
+            // close all inner dropdowns when parent is closed
+            document.querySelectorAll('.navbar .dropdown').forEach(function (everydropdown) {
+                everydropdown.addEventListener('hidden.bs.dropdown', function () {
+                    // after dropdown is hidden, then find all submenus
+                    this.querySelectorAll('.submenu').forEach(function (everysubmenu) {
+                        // hide every submenu as well
+                        everysubmenu.style.display = 'none';
+                    });
+                })
+            });
+
+            document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    let nextEl = this.nextElementSibling;
+                    if (nextEl && nextEl.classList.contains('submenu')) {
+                        // prevent opening link if link needs to open dropdown
+                        e.preventDefault();
+                        if (nextEl.style.display == 'block') {
+                            nextEl.style.display = 'none';
+                        } else {
+                            nextEl.style.display = 'block';
+                        }
+
+                    }
+                });
+            })
+        }
+        // end if innerWidth
+    });
+</script>
