@@ -7,7 +7,8 @@ The platform enables teachers and students to exchange content related to specif
 creating account in this app for both (Teachers & Student) is the first step before reviewing the user data from admin to be modified
  1) in case of **Teacher**
 	- Admins should assign Teachers to Classrooms Subjects based on thier specialty.
-		- so teacher assigned to subject is the manager of it and he can't see any subject in the classroom except this subject
-		<img src="		<img src="https://github.com/Abdelrahman-Moharram/SchoolManagementSystem/blob/master/SchoolManagementSystem/wwwroot/files/posts/9243aec7-2cc7-42d8-800c-0c4206891d4e.jpg" width >" width="200px" >
+		- so the teacher assigned to a subject is the manager of it and he can't see any subject in the classroom except this subject like next image student, it shown the differrent between students' and teachers' subjects
+ 		<img src="https://github.com/Abdelrahman-Moharram/SchoolManagementSystem/blob/master/SchoolManagementSystem/wwwroot/files/posts/9243aec7-2cc7-42d8-800c-0c4206891d4e.jpg" width="800px" >
+   	- 
 	
 ## Login
