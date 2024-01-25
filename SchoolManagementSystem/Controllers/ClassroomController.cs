@@ -21,6 +21,7 @@ namespace SchoolManagementSystem.Controllers
         private readonly IBaseRepository<LecturePost>                   LecturePostRepository; 
         private readonly IBaseRepository<SubjectClassroomTeacher>       SubjectClassroomTeacherRepository;
         private readonly UserManager<ApplicationUser>                   userManager;
+        private readonly IBaseRepository<StudentsSubjects>              studentSubjetRepository;
 
         public ClassroomController(
             IBaseRepository<Teacher>                        _teacherRepository,
@@ -32,7 +33,8 @@ namespace SchoolManagementSystem.Controllers
             IBaseRepository<Lecture>                        _LectureRepository,
             IBaseRepository<LecturePost>                    _LecturePostRepository,
             IBaseRepository<SubjectClassroomTeacher>        _SubjectClassroomTeacherRepository,
-            UserManager<ApplicationUser>                    _userManager
+            UserManager<ApplicationUser>                    _userManager,
+            IBaseRepository<StudentsSubjects>               _studentSubjetRepository
 
             )
         {
@@ -46,6 +48,7 @@ namespace SchoolManagementSystem.Controllers
             LecturePostRepository                           = _LecturePostRepository;
             SubjectClassroomTeacherRepository               = _SubjectClassroomTeacherRepository;
             userManager                                     = _userManager;
+            studentSubjetRepository = _studentSubjetRepository;
         }
 
         public async Task<List<Subject>> SubjectsAsync(string StudentId)
@@ -61,7 +64,7 @@ namespace SchoolManagementSystem.Controllers
 
         // list Subjects in Classroom
         [Route("/Classroom")]
-
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var StudentId = User.Claims.FirstOrDefault(i => i.Type == "StudentId")?.Value; 
@@ -71,6 +74,8 @@ namespace SchoolManagementSystem.Controllers
                 var Subjects = student?.Classroom?.Subjects?.ToList();
                 ViewBag.Classroom = student.Classroom?.Name;
                 ViewBag.Subjects = Subjects;
+                if(Subjects == null || Subjects.Count() == 0)
+                    return View("~/Views/ManageClassrooms/WaitResponse.cshtml");
                 return View(Subjects);
             }
             return BadRequest();

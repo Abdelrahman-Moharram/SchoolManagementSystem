@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\img\users\2fff5d43-faf3-4e2d-a2f4-7ca346d3d914.webp" />
-    <None Include="wwwroot\img\users\437175b7-e2d6-47ef-ac55-339793ed571f.webp" />
-    <None Include="wwwroot\img\users\5c2fbb00-8cbd-4a8c-854c-e9e307272161.webp" />
-    <None Include="wwwroot\img\users\ac1961ad-099f-4119-9a6e-dd64aac43276.webp" />
-    <None Include="wwwroot\img\users\user.webp" />
     <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\scss\bootstrap.scss" />
@@ -117,6 +112,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\files\" />
     <Folder Include="wwwroot\files\posts\" />
+    <Folder Include="wwwroot\img\users\" />
   </ItemGroup>
 
 </Project>
