@@ -60,6 +60,7 @@ namespace SchoolManagementSystem.Controllers
 
 
         [Route("/ManageClassrooms")]
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var TeacherId = User.Claims.FirstOrDefault(i => i.Type == "TeacherId")?.Value;
@@ -68,8 +69,11 @@ namespace SchoolManagementSystem.Controllers
             {
                 var Classrooms      = await classroomsAsync(TeacherId);
                 ViewBag.Classrooms  = Classrooms;
+                if (Classrooms.Count() == 0)
+                    return View("WaitResponse");
                 return View(Classrooms);
             }
+            
             return BadRequest();
         }
 

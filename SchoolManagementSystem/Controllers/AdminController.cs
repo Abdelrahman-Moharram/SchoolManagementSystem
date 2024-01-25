@@ -23,8 +23,7 @@ namespace SchoolManagementSystem.Controllers
         private readonly IBaseRepository<Subject>                   subjectRepository;
         private readonly IBaseRepository<SubjectCategory>           subjectCategoryRepository;
         private readonly IBaseRepository<SubjectClassroomTeacher>   subjectClassroomTeacherRepository;
-        
-
+        private readonly IBaseRepository<StudentsSubjects>   studentSubjetRepository;
 
         public AdminController(
             UserManager<ApplicationUser>                _userManager,
@@ -36,7 +35,8 @@ namespace SchoolManagementSystem.Controllers
             IBaseRepository<Level>                      _LevelRepository,
             IBaseRepository<Subject>                    _subjectRepository,
             IBaseRepository<SubjectCategory>            _subjectCategoryRepository,
-            IBaseRepository<SubjectClassroomTeacher>    _subjectClassroomTeacherRepository
+            IBaseRepository<SubjectClassroomTeacher>    _subjectClassroomTeacherRepository,
+            IBaseRepository<StudentsSubjects>           _studentSubjetRepository
             )
         {
             registerRepository                          = _registerRepository;
@@ -49,6 +49,7 @@ namespace SchoolManagementSystem.Controllers
             subjectRepository                           = _subjectRepository;
             subjectCategoryRepository                   = _subjectCategoryRepository;
             subjectClassroomTeacherRepository           = _subjectClassroomTeacherRepository;
+            studentSubjetRepository                     = _studentSubjetRepository;
         }
 
 
@@ -276,9 +277,15 @@ namespace SchoolManagementSystem.Controllers
                     await Task.Run(() => item.Subjects.Add(subject));
                 }
                 var Students = await studentRepository.FindAll(i=>i.LevelId == subject.levelId);
+                
                 foreach (var item in Students)
                 {
-                    await Task.Run(() => item.Subjects.Add(subject));
+                    studentSubjetRepository.Add(new StudentsSubjects
+                    {
+                        StudentId = item.Id,
+                        SubjectId = subject.Id,
+                        TotalGrade = 0,
+                    });
                 }
                 await Task.Run(()=>subjectRepository.Add(subject));
                 subjectRepository.Save();
