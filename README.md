@@ -6,8 +6,8 @@ The platform enables teachers and students to exchange content related to specif
 ## Register
 There are both Checking form data
  1) Backend using (Remote, Ajax) with ViewModels
-	- <img src="https://github.com/Abdelrahman-Moharram/SchoolManagementSystem/blob/master/SchoolManagementSystem/wwwroot/files/posts/21c07d92-568b-457b-84c8-c92dba99a99e.jpg" width="800px" style="flaot-left" >
- 	- <img src="https://github.com/Abdelrahman-Moharram/SchoolManagementSystem/blob/master/SchoolManagementSystem/wwwroot/files/posts/2016af59-436c-4925-951d-6a8aa7d57b45.jpg" width="800px" >
+	- <img src="https://github.com/Abdelrahman-Moharram/SchoolManagementSystem/blob/master/SchoolManagementSystem/wwwroot/files/posts/21c07d92-568b-457b-84c8-c92dba99a99e.jpg" width="300px" style="flaot-left" >
+ 	- <img src="https://github.com/Abdelrahman-Moharram/SchoolManagementSystem/blob/master/SchoolManagementSystem/wwwroot/files/posts/2016af59-436c-4925-951d-6a8aa7d57b45.jpg" width="300px" >
 
  3) Frontend using (JavaScript + jquery)
 
