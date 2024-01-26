@@ -21,7 +21,7 @@ There are both Checking form errors
 ### Login
 -----
 
-## Admin
+## Admins
 ### List of All [Subjects, Levels, Subject Category, ClassRooms]
 ### New Registers
 - this get action method shows the new users **not completed** data.
@@ -38,12 +38,16 @@ There are both Checking form errors
 ### Filter Classrooms with Level_id
 ----
 
-## Classroom 
-- is a Controller for students 
+## Classrooms 
+### is a Controller for students that shows all the Subjects for the logged-in student, and that allows them to show and add posts.
+- Subjects
+	- Lectures
+ 		- Posts
+----
 
-### Index
-- Shows the list of Subjects for the logged-in student
-### Subject
-- Shows the List of Lectures on this Subject
-### Lecture
-- Shows the List of Posts in this Lecture
+## Teachers 
+### is a Controller for Teachers that shows all the Teachers' Subjects in all classrooms and levels and adds lectures and new content.
+- Classrooms
+	- Subjects
+		- Lectures
+ 			- Posts
