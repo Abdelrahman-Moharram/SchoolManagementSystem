@@ -1,7 +1,7 @@
 # Summary
 The platform enables teachers and students to exchange content related to specific subjects. Administrators have control over creating classrooms and managing registrations, assigning students to classrooms, and adding subjects automatically to all students. Teachers can be added to a classroom based on their specialty and can then add lectures and new content on that particular subject. 
 
-# In this web application we have 4 Controllers 
+# In this web application we have 4 main Controllers 
 
 
 ## Accounts
